@@ -180,7 +180,7 @@ export function expressaoDoRegistro(status: StatusRegistro, tags: string[] = [])
     concluida: "comemorando",
     pausado: "dormindo",
     abandonado: "triste",
-    desejo: "piscando",
+    desejo: "feliz",
   };
   return mapa[status] ?? "neutro";
 }
@@ -189,10 +189,10 @@ export function expressaoDoRegistro(status: StatusRegistro, tags: string[] = [])
 export const EXPRESSAO_STATUS_PECA: Record<StatusPeca, Expressao> = {
   em_uso: "feliz",
   guardado: "dormindo",
-  emprestado: "piscando",
+  emprestado: "feliz",
   em_conserto: "pensando",
   quebrado: "tonto",
-  vendido: "piscando",
+  vendido: "feliz",
   trocado: "comemorando",
   doado: "feliz",
   descartado: "triste",

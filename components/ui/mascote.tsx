@@ -2,10 +2,9 @@ import { useId } from "react";
 
 export type Expressao =
   | "neutro" // padrão
-  | "feliz" // deu certo, salvou
+  | "feliz" // deu certo, salvou, boas-vindas, venda feita
   | "comemorando" // zerou, concluiu, meta batida
   | "deslumbrado" // platinou, recorde, retrospectiva cheia
-  | "piscando" // boas-vindas, venda feita
   | "dormindo" // nada rolando, sem internet, guardado
   | "procurando" // busca, listas vazias
   | "confuso" // nada encontrado, página que não existe
@@ -81,14 +80,6 @@ function Rosto({ expressao }: { expressao: Expressao }) {
           <path d={estrela(378, 290, 44)} fill={TINTA} stroke={TINTA} strokeWidth={8} strokeLinejoin="round" />
           <ellipse cx="327" cy="398" rx="20" ry="24" fill={TINTA} />
           <Brilhos />
-        </>
-      );
-    case "piscando":
-      return (
-        <>
-          <path d="M275.5 265.5V317" strokeWidth={66} {...traco} />
-          <path d="M350 298Q378 320 406 298" strokeWidth={24} {...traco} />
-          <path d={SORRISO} strokeWidth={18} {...traco} />
         </>
       );
     case "dormindo":

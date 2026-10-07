@@ -14,7 +14,7 @@ export default function Entrar() {
         <p className="mt-3 max-w-[58%] text-20 font-bold leading-tight">
           Tudo que você zerou, assistiu e montou.
         </p>
-        <Mascote expressao="piscando" animacao="flutuar" className="ml-auto -mt-14 mb-3 h-36 w-auto" />
+        <Mascote expressao="feliz" animacao="flutuar" className="ml-auto -mt-14 mb-3 h-36 w-auto" />
       </div>
 
       <div className="mt-4">

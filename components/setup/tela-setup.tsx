@@ -211,7 +211,7 @@ function Saidas({ pecas }: { pecas: Peca[] }) {
             </p>
           )}
         </div>
-        <Mascote expressao={comValor.length === 0 ? "pensando" : resultado >= 0 ? "comemorando" : "piscando"} className="h-20 w-auto shrink-0" />
+        <Mascote expressao={comValor.length === 0 ? "pensando" : resultado >= 0 ? "comemorando" : "feliz"} className="h-20 w-auto shrink-0" />
       </section>
 
       <ul className="mt-4 divide-y-2 divide-chip overflow-hidden rounded-[22px] bg-cartao">
