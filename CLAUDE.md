@@ -200,7 +200,7 @@ public/icons/
 ## Etapas
 1. **Base do projeto** — Next.js + TS + Tailwind, tokens de cor, fontes, navegação inferior com 5 itens. ✅
 2. **PWA** — Serwist: manifesto "Zerei", ícones, cor de tema azul, instalação guiada para iPhone. ✅
-3. **Supabase e login** — migrações do modelo de dados com RLS, login com Google e e-mail.
+3. **Supabase e login** — migrações do modelo de dados com RLS, login com Google e e-mail. ✅ (código pronto; falta aplicar a migração e configurar o Google)
 4. **Busca e ficha** — rotas de API IGDB/TMDB, tela Adicionar com busca única, Ficha da mídia com cache em `midias`.
 5. **Biblioteca** — filtro de tipo, abas por status, filtros, ordenação, painel de editar registro.
 6. **Séries** — temporadas com marcação de episódios, barra de progresso, próximo episódio.
@@ -214,6 +214,9 @@ public/icons/
 - Página offline de reserva: `app/~offline/page.tsx` (pré-cacheada).
 - Ícones gerados por `npm run icones` (`scripts/gerar-icones.mjs`, usa sharp).
 - Detecção de plataforma e prompt de instalação: `lib/instalacao.ts`; guia em `/instalar`.
+- Supabase: clientes em `lib/supabase/` (`client.ts` navegador, `server.ts` servidor, `proxy.ts` renova sessão). `proxy.ts` na raiz manda quem não entrou para `/entrar` (rotas públicas listadas em `lib/supabase/proxy.ts`).
+- Login: Google (OAuth, volta por `/auth/callback`) e e-mail com **código de 6 dígitos** (OTP), não link mágico — link abriria fora do PWA no iPhone. O template de e-mail do Supabase precisa ter `{{ .Token }}`.
+- Migrações em `supabase/migrations/`, aplicadas colando no SQL Editor do Supabase. Status por tipo de mídia validado pelo gatilho `valida_status_registro`.
 - No Windows (PowerShell 5.1), não editar arquivos com `Get-Content`/`Set-Content`: estraga os acentos.
 
 ## Riscos

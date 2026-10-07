@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ChevronRight, Download, Monitor } from "lucide-react";
+import { ContaResumo } from "@/components/auth/conta-resumo";
 import { EstadoVazio } from "@/components/ui/estado-vazio";
 import { TituloTela } from "@/components/ui/titulo-tela";
 
@@ -29,6 +30,7 @@ export default function Perfil() {
         <span className="flex-1 text-corpo font-bold">Instalar o app</span>
         <ChevronRight size={20} strokeWidth={2.2} />
       </Link>
+      <ContaResumo />
       <EstadoVazio
         expressao="neutro"
         titulo="Seu perfil está aquecendo."
