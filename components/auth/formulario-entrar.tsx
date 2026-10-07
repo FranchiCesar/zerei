@@ -42,7 +42,11 @@ export function FormularioEntrar() {
   const [codigo, setCodigo] = useState("");
   const [carregando, setCarregando] = useState<"google" | "email" | "codigo" | null>(null);
   const [erro, setErro] = useState<string | null>(
-    params.get("erro") === "google" ? "Não deu para entrar com o Google. Tente de novo." : null,
+    params.get("erro") === "google"
+      ? "Não deu para entrar com o Google. Tente de novo."
+      : params.get("erro") === "acesso"
+        ? "Este e-mail não tem acesso ao Zerei. Peça ao administrador para liberar."
+        : null,
   );
 
   async function entrarComGoogle() {
@@ -67,6 +71,19 @@ export function FormularioEntrar() {
     setErro(null);
     setCarregando("email");
     const supabase = criarClienteNavegador();
+
+    // Acesso restrito: só manda código para e-mails liberados
+    const { data: liberado, error: erroAcesso } = await supabase.rpc("email_tem_acesso", { p_email: email.trim() });
+    if (erroAcesso || liberado !== true) {
+      setCarregando(null);
+      setErro(
+        erroAcesso
+          ? "Não deu para conferir o acesso agora. Tente de novo."
+          : "Este e-mail não tem acesso ao Zerei. Peça ao administrador para liberar.",
+      );
+      return;
+    }
+
     const { error } = await supabase.auth.signInWithOtp({
       email: email.trim(),
       options: { shouldCreateUser: true },

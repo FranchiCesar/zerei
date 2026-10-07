@@ -610,3 +610,66 @@ export function useSalvarMeta() {
     onError: (e) => avisarErro(e, "Não deu para salvar a meta."),
   });
 }
+
+// ============================================================
+// Acesso restrito (e-mails autorizados)
+// ============================================================
+
+export interface EmailPermitido {
+  email: string;
+  papel: "admin" | "usuario";
+  adicionado_em: string;
+}
+
+export function useAcesso() {
+  return useQuery({
+    queryKey: ["acesso"],
+    queryFn: async () => {
+      const [acesso, admin] = await Promise.all([sb().rpc("tem_acesso"), sb().rpc("sou_admin")]);
+      if (acesso.error) throw acesso.error;
+      return { temAcesso: acesso.data === true, admin: admin.data === true };
+    },
+    staleTime: 5 * 60_000,
+  });
+}
+
+export function useEmailsPermitidos(ativo: boolean) {
+  return useQuery({
+    queryKey: ["emails-permitidos"],
+    enabled: ativo,
+    queryFn: async () =>
+      ok<EmailPermitido[]>(
+        await sb().from("emails_permitidos").select("email, papel, adicionado_em").order("adicionado_em"),
+      ),
+  });
+}
+
+export function useAdicionarEmail() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (email: string) =>
+      ok(
+        await sb()
+          .from("emails_permitidos")
+          .insert({ email: email.trim().toLowerCase(), adicionado_por: await idUsuario() }),
+      ),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["emails-permitidos"] });
+      mostrarAviso("E-mail liberado.");
+    },
+    onError: (e: { code?: string }) =>
+      avisarErro(e, e.code === "23505" ? "Esse e-mail já está liberado." : e.code === "23514" ? "E-mail inválido." : "Não deu para liberar."),
+  });
+}
+
+export function useRemoverEmail() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (email: string) => ok(await sb().from("emails_permitidos").delete().eq("email", email)),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["emails-permitidos"] });
+      mostrarAviso("Acesso removido.");
+    },
+    onError: (e) => avisarErro(e, "Não deu para remover."),
+  });
+}

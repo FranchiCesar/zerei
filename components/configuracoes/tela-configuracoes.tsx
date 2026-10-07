@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { FileDown, LogOut, Monitor, Moon, Sun, UserX } from "lucide-react";
+import { AcessoAdmin } from "@/components/configuracoes/acesso-admin";
 import { LigarEmLote } from "@/components/configuracoes/ligar-em-lote";
 import { Painel } from "@/components/ui/painel";
 import { Topo } from "@/components/ui/topo";
@@ -41,6 +42,8 @@ export function TelaConfiguracoes() {
       <TituloTela>Configurações</TituloTela>
 
       <Conta email={usuario?.email ?? null} />
+
+      <AcessoAdmin />
 
       <section className="mt-4 rounded-[24px] bg-cartao p-5">
         <h2 className="titulo text-20">Tema</h2>

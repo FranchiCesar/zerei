@@ -216,6 +216,7 @@ public/icons/
 - Detecção de plataforma e prompt de instalação: `lib/instalacao.ts`; guia em `/instalar`.
 - Supabase: clientes em `lib/supabase/` (`client.ts` navegador, `server.ts` servidor, `proxy.ts` renova sessão). `proxy.ts` na raiz manda quem não entrou para `/entrar` (rotas públicas listadas em `lib/supabase/proxy.ts`).
 - Login: Google (OAuth, volta por `/auth/callback`) e e-mail com **código de 6 dígitos** (OTP), não link mágico — link abriria fora do PWA no iPhone. O template de e-mail do Supabase precisa ter `{{ .Token }}`.
+- **Acesso restrito (uso pessoal, sem fins comerciais):** só e-mails da tabela `emails_permitidos` entram. O primeiro usuário é `admin` e libera/remove e-mails em Configurações. Três travas: checagem `email_tem_acesso` antes de mandar o código; gancho do Auth "Before User Created" (`public.antes_de_criar_usuario`, ativado no painel do Supabase); políticas RLS `restrictive` com `tem_acesso()` em todas as tabelas do usuário. As rotas de API também exigem `tem_acesso`.
 - Migrações em `supabase/migrations/`, aplicadas colando no SQL Editor do Supabase. Status por tipo de mídia validado pelo gatilho `valida_status_registro`.
 - No Windows (PowerShell 5.1), não editar arquivos com `Get-Content`/`Set-Content`: estraga os acentos.
 

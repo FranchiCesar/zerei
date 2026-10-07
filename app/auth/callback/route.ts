@@ -8,10 +8,21 @@ export async function GET(request: NextRequest) {
   const codigo = searchParams.get("code");
   const destino = caminhoSeguro(searchParams.get("voltar"));
 
+  // O gancho "Before User Created" recusou a conta (e-mail fora da lista)
+  if (searchParams.get("error")) {
+    return NextResponse.redirect(`${origin}/entrar?erro=acesso`);
+  }
+
   if (codigo) {
     const supabase = await criarClienteServidor();
     const { error } = await supabase.auth.exchangeCodeForSession(codigo);
     if (!error) {
+      // Segunda trava: conta existe mas o e-mail não está liberado
+      const { data: temAcesso } = await supabase.rpc("tem_acesso");
+      if (temAcesso !== true) {
+        await supabase.auth.signOut();
+        return NextResponse.redirect(`${origin}/entrar?erro=acesso`);
+      }
       return NextResponse.redirect(`${origin}${destino}`);
     }
   }
