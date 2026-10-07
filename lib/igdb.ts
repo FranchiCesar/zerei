@@ -54,6 +54,33 @@ interface JogoIGDB {
   involved_companies?: { developer: boolean; company: { name: string } }[];
 }
 
+// A IGDB só tem nomes em inglês
+const GENEROS_PT: Record<string, string> = {
+  "Point-and-click": "Point-and-click",
+  Fighting: "Luta",
+  Shooter: "Tiro",
+  Music: "Música",
+  Platform: "Plataforma",
+  Puzzle: "Quebra-cabeça",
+  Racing: "Corrida",
+  "Real Time Strategy (RTS)": "Estratégia em tempo real",
+  "Role-playing (RPG)": "RPG",
+  Simulator: "Simulação",
+  Sport: "Esporte",
+  Strategy: "Estratégia",
+  "Turn-based strategy (TBS)": "Estratégia por turnos",
+  Tactical: "Tático",
+  "Hack and slash/Beat 'em up": "Hack and slash",
+  "Quiz/Trivia": "Quiz",
+  Pinball: "Pinball",
+  Adventure: "Aventura",
+  Indie: "Indie",
+  Arcade: "Arcade",
+  "Visual Novel": "Visual novel",
+  "Card & Board Game": "Cartas e tabuleiro",
+  MOBA: "MOBA",
+};
+
 const capa = (imagem?: { image_id: string }) =>
   imagem ? `https://images.igdb.com/igdb/image/upload/t_cover_big/${imagem.image_id}.jpg` : null;
 
@@ -107,7 +134,7 @@ export async function detalharJogo(idExterno: string) {
     titulo: jogo.name,
     capa_url: capa(jogo.cover),
     ano: ano(jogo.first_release_date),
-    generos: (jogo.genres ?? []).map((g) => g.name),
+    generos: (jogo.genres ?? []).map((g) => GENEROS_PT[g.name] ?? g.name),
     plataformas: plataformas(jogo),
     duracao_min: null,
     tempo_zerar_h: segundos ? Math.round((segundos / 3600) * 10) / 10 : null,
