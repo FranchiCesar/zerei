@@ -50,7 +50,7 @@ Público: jogadores de 18 a 40 anos que consomem jogos e streaming, gostam de or
 - Nota por temporada além da nota geral
 
 ### Setup
-- Categorias: PC (processador, placa de vídeo, memória, placa-mãe, armazenamento, fonte, gabinete), console, monitor, periféricos, áudio, móveis
+- Categorias: PC (processador, placa de vídeo, memória, placa-mãe, armazenamento, fonte, gabinete, refrigeração), console, monitor, periféricos, áudio, móveis, acessórios
 - Ficha da peça: foto, marca, modelo, preço pago, data e loja da compra, garantia
 - Status: Em uso, Guardado, Vendido, Quebrado
 - Valor total investido, com divisão por categoria, e galeria de fotos do setup
