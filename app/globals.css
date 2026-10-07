@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+/* Tokens da marca (ver CLAUDE.md > Identidade visual) */
+:root {
+  --azul: #2f6bff;
+  --azul-escuro: #1a47c9;
+  --azul-claro: #dce7ff;
+  --tinta: #0e0e0e;
+  --papel: #eceae1;
+  --cartao: #ffffff;
+  --texto: #0e0e0e;
+  --texto-suave: #5a574d;
+  --conquista: #b6ff3b;
+  --chip: #eceae1;
+  --borda: #cfcbbd;
+  --linha-relevo: rgb(14 14 14 / 0.05);
+
+  --status-ativo: #2f6bff;
+  --status-fila: #f2a93b;
+  --status-zerado: #b6ff3b;
+  --status-pausado: #9aa3b5;
+  --status-abandonado: #3a3a3a;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --azul: #5b8cff;
+    --azul-claro: #26324f;
+    --papel: #121318;
+    --cartao: #1c1e26;
+    --texto: #f2f1ec;
+    --texto-suave: #a4a196;
+    --chip: #2a2d38;
+    --borda: #3a3d48;
+    --linha-relevo: rgb(255 255 255 / 0.04);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --azul: #5b8cff;
+  --azul-claro: #26324f;
+  --papel: #121318;
+  --cartao: #1c1e26;
+  --texto: #f2f1ec;
+  --texto-suave: #a4a196;
+  --chip: #2a2d38;
+  --borda: #3a3d48;
+  --linha-relevo: rgb(255 255 255 / 0.04);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-azul: var(--azul);
+  --color-azul-escuro: var(--azul-escuro);
+  --color-azul-claro: var(--azul-claro);
+  --color-tinta: var(--tinta);
+  --color-papel: var(--papel);
+  --color-cartao: var(--cartao);
+  --color-texto: var(--texto);
+  --color-texto-suave: var(--texto-suave);
+  --color-conquista: var(--conquista);
+  --color-chip: var(--chip);
+  --color-borda: var(--borda);
+
+  --color-status-ativo: var(--status-ativo);
+  --color-status-fila: var(--status-fila);
+  --color-status-zerado: var(--status-zerado);
+  --color-status-pausado: var(--status-pausado);
+  --color-status-abandonado: var(--status-abandonado);
+
+  --font-sans: var(--font-dm-sans);
+  --font-titulo: var(--font-bricolage);
+
+  --radius-cartao-g: 28px;
+  --radius-cartao-m: 22px;
+
+  --shadow-destaque: 0 14px 32px -12px rgb(47 107 255 / 0.55);
+
+  /* Escala tipográfica do documento */
+  --text-tela: 46px;
+  --text-tela--line-height: 0.95;
+  --text-destaque: 34px;
+  --text-destaque--line-height: 1;
+  --text-22: 22px;
+  --text-20: 20px;
+  --text-corpo: 15px;
+  --text-13: 13px;
+  --text-12: 12px;
+  --text-11: 11px;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: var(--papel);
+  /* Linhas de relevo */
+  background-image: repeating-radial-gradient(
+    ellipse 140% 90% at 50% -10%,
+    transparent 0 46px,
+    var(--linha-relevo) 46px 47.5px
+  );
+  background-attachment: fixed;
+  color: var(--texto);
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+}
+
+@utility titulo {
+  font-family: var(--font-bricolage), system-ui, sans-serif;
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+}
+
+@utility sem-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
