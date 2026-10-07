@@ -233,4 +233,4 @@ public/icons/
 - Limite da IGDB: cache em `midias` e busca com debounce
 - Chaves expostas: chamadas apenas no servidor; `.env.local` fora do Git
 - PWA no iPhone: tela guiada de instalação; notificações depois
-- Deploy: Vercel, projeto `zerei`, produção em https://zerei-chi.vercel.app. Ligado ao GitHub: cada push na `main` publica sozinho em produção. `.vercelignore` impede o envio de `.env*` e `supabase/seed/`.
+- Deploy: Vercel, projeto `zerei`, produção em https://zereiapp.vercel.app. Ligado ao GitHub: cada push na `main` publica sozinho em produção. `.vercelignore` impede o envio de `.env*` e `supabase/seed/`.
