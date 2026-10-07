@@ -32,8 +32,10 @@ export async function atualizarSessao(request: NextRequest) {
 
   const caminho = request.nextUrl.pathname;
   const publica = ROTAS_PUBLICAS.some((r) => caminho === r || caminho.startsWith(`${r}/`));
+  // Rotas de API respondem 401 em JSON por conta própria; redirecionar quebraria o fetch
+  const api = caminho.startsWith("/api/");
 
-  if (!logado && !publica) {
+  if (!logado && !publica && !api) {
     const url = request.nextUrl.clone();
     url.pathname = "/entrar";
     url.search = "";
