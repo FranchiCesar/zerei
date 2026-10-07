@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, DM_Sans } from "next/font/google";
+import Script from "next/script";
 import { SerwistProvider } from "@serwist/turbopack/react";
 import { Provedores } from "@/components/provedores";
 import { SCRIPT_TEMA } from "@/lib/tema-script";
@@ -49,10 +50,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
       className={`${bricolage.variable} ${dmSans.variable} h-full antialiased`}
     >
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: SCRIPT_TEMA }} />
-      </head>
       <body className="min-h-full">
+        <Script id="tema" strategy="beforeInteractive">
+          {SCRIPT_TEMA}
+        </Script>
         {/* Em desenvolvimento o service worker fica desligado para não servir telas velhas */}
         <SerwistProvider
           swUrl="/serwist/sw.js"
