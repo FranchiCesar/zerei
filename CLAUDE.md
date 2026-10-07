@@ -233,3 +233,4 @@ public/icons/
 - Limite da IGDB: cache em `midias` e busca com debounce
 - Chaves expostas: chamadas apenas no servidor; `.env.local` fora do Git
 - PWA no iPhone: tela guiada de instalação; notificações depois
+- Deploy: Vercel, projeto `zerei`, produção em https://zerei-chi.vercel.app. Por enquanto sem integração com o GitHub (a liberação do app da Vercel no GitHub dava erro 500): publicar com `vercel deploy --prod` na pasta do projeto. `.vercelignore` impede o envio de `.env*` e `supabase/seed/`.

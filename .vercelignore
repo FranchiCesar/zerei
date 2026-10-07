@@ -1,0 +1,6 @@
+# Nunca enviar segredos nem dados pessoais no deploy pela CLI
+.env*
+!.env.example
+supabase/seed/
+.next/
+node_modules/
