@@ -13,7 +13,7 @@ function Passos({ passos }: { passos: Passo[] }) {
     <ol className="mt-6 space-y-3">
       {passos.map((passo, i) => (
         <li key={i} className="flex gap-4 rounded-[22px] bg-cartao p-4">
-          <span className="titulo flex size-11 shrink-0 items-center justify-center rounded-full bg-azul text-20 text-white">
+          <span className="titulo flex size-11 shrink-0 items-center justify-center rounded-full bg-marca text-20 text-white">
             {i + 1}
           </span>
           <div className="min-w-0 flex-1">
@@ -22,7 +22,7 @@ function Passos({ passos }: { passos: Passo[] }) {
           </div>
           <span
             aria-hidden="true"
-            className="flex size-11 shrink-0 items-center justify-center rounded-[14px] bg-azul-claro text-azul"
+            className="flex size-11 shrink-0 items-center justify-center rounded-[14px] bg-marca-claro text-marca"
           >
             {passo.icone}
           </span>
@@ -86,7 +86,7 @@ export function GuiaInstalacao() {
         </p>
         <Link
           href="/inicio"
-          className="mt-6 flex h-12 items-center rounded-full bg-azul px-6 text-corpo font-bold text-white"
+          className="mt-6 flex h-12 items-center rounded-full bg-marca px-6 text-corpo font-bold text-white"
         >
           Ir para a Início
         </Link>
@@ -98,7 +98,7 @@ export function GuiaInstalacao() {
     return (
       <div className="mt-6 rounded-[28px] bg-cartao p-5">
         <div className="flex items-center gap-3">
-          <Compass size={28} strokeWidth={2.2} className="text-azul" />
+          <Compass size={28} strokeWidth={2.2} className="text-marca" />
           <h2 className="titulo text-22">Abra no Safari primeiro</h2>
         </div>
         <p className="mt-3 text-corpo text-texto-suave">
@@ -113,7 +113,7 @@ export function GuiaInstalacao() {
   return (
     <>
       {podeInstalar && (
-        <div className="mt-6 rounded-[28px] bg-azul p-5 text-white shadow-destaque">
+        <div className="mt-6 rounded-[28px] bg-marca p-5 text-white shadow-destaque">
           <p className="text-corpo font-bold">Seu navegador permite instalar direto.</p>
           <button
             type="button"

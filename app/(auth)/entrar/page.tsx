@@ -9,7 +9,7 @@ export const metadata = { title: "Entrar · Zerei" };
 export default function Entrar() {
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pt-[max(env(safe-area-inset-top),24px)] pb-[max(env(safe-area-inset-bottom),24px)]">
-      <div className="relative mt-4 overflow-hidden rounded-[28px] bg-azul px-5 pt-6 pb-0 text-white shadow-destaque">
+      <div className="relative mt-4 overflow-hidden rounded-[28px] bg-marca px-5 pt-6 pb-0 text-white shadow-destaque">
         <p className="titulo text-tela">Zerei</p>
         <p className="mt-3 max-w-[58%] text-20 font-bold leading-tight">
           Tudo que você zerou, assistiu e montou.

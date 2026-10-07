@@ -6,12 +6,13 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { FileDown, LogOut, Monitor, Moon, Sun, UserX } from "lucide-react";
 import { AcessoAdmin } from "@/components/configuracoes/acesso-admin";
+import { FormularioPerfil } from "@/components/perfil/formulario-perfil";
 import { LigarEmLote } from "@/components/configuracoes/ligar-em-lote";
 import { Painel } from "@/components/ui/painel";
 import { Topo } from "@/components/ui/topo";
 import { TituloTela } from "@/components/ui/titulo-tela";
 import { avisarErro, mostrarAviso } from "@/lib/avisos";
-import { useAtualizarPerfil, useMetas, usePerfil, useSalvarMeta, useUsuario } from "@/lib/dados";
+import { useMetas, useSalvarMeta, useUsuario } from "@/lib/dados";
 import { hojeISO } from "@/lib/formato";
 import { limparCopiaLocal } from "@/lib/offline";
 import { ROTULO_TIPO_PLURAL } from "@/lib/status";
@@ -62,7 +63,7 @@ export function TelaConfiguracoes() {
               aria-checked={tema === valor}
               onClick={() => definirTema(valor)}
               className={`flex min-h-16 flex-col items-center justify-center gap-1 rounded-[18px] text-13 font-bold ${
-                tema === valor ? "bg-azul text-white" : "bg-chip"
+                tema === valor ? "bg-marca text-white" : "bg-chip"
               }`}
             >
               <Icone size={20} strokeWidth={2.2} />
@@ -107,43 +108,11 @@ export function TelaConfiguracoes() {
 }
 
 function Conta({ email }: { email: string | null }) {
-  const { data: perfil } = usePerfil();
-  const atualizar = useAtualizarPerfil();
-  const [erro, setErro] = useState<string | null>(null);
-
   return (
     <section className="mt-5 rounded-[24px] bg-cartao p-5">
       <h2 className="titulo text-20">Conta</h2>
-      <p className="mt-1 text-13 text-texto-suave">{email}</p>
-      <form
-        key={perfil?.id ?? "carregando"}
-        onSubmit={(e) => {
-          e.preventDefault();
-          const dados = new FormData(e.currentTarget);
-          const nome = String(dados.get("nome") ?? "").trim().slice(0, 60);
-          const usuario = String(dados.get("usuario") ?? "").trim().toLowerCase();
-          if (usuario && !/^[a-z0-9_]{3,20}$/.test(usuario)) {
-            setErro("Usuário: 3 a 20 letras minúsculas, números ou _");
-            return;
-          }
-          setErro(null);
-          atualizar.mutate({ nome: nome || null, usuario: usuario || null });
-        }}
-        className="mt-3 space-y-3"
-      >
-        <div>
-          <label htmlFor="nome" className="rotulo">Nome</label>
-          <input id="nome" name="nome" className="campo" defaultValue={perfil?.nome ?? ""} maxLength={60} />
-        </div>
-        <div>
-          <label htmlFor="usuario" className="rotulo">Usuário</label>
-          <input id="usuario" name="usuario" className="campo" defaultValue={perfil?.usuario ?? ""} placeholder="cesar" maxLength={20} autoCapitalize="none" />
-        </div>
-        {erro && <p role="alert" className="text-13 font-bold text-perigo">{erro}</p>}
-        <button type="submit" disabled={atualizar.isPending} className="botao botao-azul w-full">
-          Salvar
-        </button>
-      </form>
+      <p className="mb-4 mt-1 text-13 text-texto-suave">{email}</p>
+      <FormularioPerfil />
     </section>
   );
 }
@@ -188,7 +157,7 @@ function Metas() {
             </div>
           ))}
         </div>
-        <button type="submit" disabled={salvar.isPending} className="botao botao-azul mt-3 w-full">
+        <button type="submit" disabled={salvar.isPending} className="botao botao-marca mt-3 w-full">
           Salvar metas
         </button>
       </form>

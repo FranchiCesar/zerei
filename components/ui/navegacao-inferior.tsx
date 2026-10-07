@@ -22,7 +22,7 @@ function ItemNav({
       aria-label={rotulo}
       aria-current={ativo ? "page" : undefined}
       className={`flex size-12 items-center justify-center rounded-full transition-colors ${
-        ativo ? "text-azul" : "text-white hover:text-white/80"
+        ativo ? "text-conquista" : "text-white hover:text-white/80"
       }`}
     >
       <Icone size={24} strokeWidth={2.2} />
@@ -59,7 +59,7 @@ function Barra({ caminho }: { caminho: string }) {
           href="/adicionar"
           aria-label="Adicionar"
           aria-current={ativo("/adicionar") ? "page" : undefined}
-          className="-mt-9 box-content flex size-14 shrink-0 items-center justify-center rounded-full border-4 border-papel bg-azul text-white shadow-destaque transition-colors active:bg-azul-escuro"
+          className="-mt-9 box-content flex size-14 shrink-0 items-center justify-center rounded-full border-4 border-papel bg-marca text-white shadow-destaque transition-colors active:bg-marca-escuro"
         >
           <Plus size={28} strokeWidth={2.6} />
         </Link>

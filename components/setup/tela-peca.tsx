@@ -45,7 +45,7 @@ export function TelaPeca() {
   return (
     <main>
       <Topo voltarPara="/setup">
-        <Link href={`/setup/${peca.id}/editar`} className="botao botao-azul">
+        <Link href={`/setup/${peca.id}/editar`} className="botao botao-marca">
           <Pencil size={18} strokeWidth={2.2} /> Editar
         </Link>
       </Topo>

@@ -342,7 +342,7 @@ function FormularioRegistro({
                 aria-pressed={ativa}
                 onClick={() => setValue("tags", ativa ? tags.filter((t) => t !== tag) : [...tags, tag])}
                 className={`flex min-h-10 items-center gap-1 rounded-full px-3 text-12 font-bold ${
-                  ativa ? "bg-azul text-white" : "bg-chip"
+                  ativa ? "bg-marca text-white" : "bg-chip"
                 }`}
               >
                 {tag}
@@ -392,7 +392,7 @@ function FormularioRegistro({
                 field.value ? "bg-tinta text-white" : "bg-chip"
               }`}
             >
-              <Heart size={18} strokeWidth={2.2} className={field.value ? "fill-azul text-azul" : ""} />
+              <Heart size={18} strokeWidth={2.2} className={field.value ? "fill-marca text-marca" : ""} />
               Favorito
             </button>
           )}
@@ -419,7 +419,7 @@ function FormularioRegistro({
         <p role="alert" className="text-13 font-bold text-perigo">{erro}</p>
       )}
 
-      <button type="submit" disabled={salvar.isPending} className="botao botao-azul w-full">
+      <button type="submit" disabled={salvar.isPending} className="botao botao-marca w-full">
         {salvar.isPending ? "Salvando..." : "Salvar"}
       </button>
     </form>

@@ -41,7 +41,7 @@ export function BotaoRedondo({
       aria-label={rotulo}
       aria-pressed={ativo}
       onClick={onClick}
-      className={`flex size-12 shrink-0 items-center justify-center rounded-full ${ativo ? "bg-azul text-white" : "bg-cartao"}`}
+      className={`flex size-12 shrink-0 items-center justify-center rounded-full ${ativo ? "bg-marca text-white" : "bg-cartao"}`}
     >
       {children}
     </button>

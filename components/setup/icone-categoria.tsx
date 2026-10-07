@@ -42,7 +42,7 @@ export function ImagemPeca({ peca, className = "", tamanhoIcone = 22 }: { peca: 
   }
   const Icone = ICONE_CATEGORIA[peca.categoria];
   return (
-    <div aria-hidden="true" className={`flex items-center justify-center bg-azul-claro text-azul-texto ${className}`}>
+    <div aria-hidden="true" className={`flex items-center justify-center bg-marca-claro text-marca-texto ${className}`}>
       <Icone size={tamanhoIcone} strokeWidth={2.2} />
     </div>
   );

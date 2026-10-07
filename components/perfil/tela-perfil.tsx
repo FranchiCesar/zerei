@@ -2,8 +2,12 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { ChevronRight, Download, Gamepad2, Lock, Monitor, Settings, Sparkles, Trophy } from "lucide-react";
+import { ChevronRight, Download, Gamepad2, Lock, Monitor, Pencil, Settings, Sparkles, Trophy } from "lucide-react";
+import { useState } from "react";
+import { FormularioPerfil } from "@/components/perfil/formulario-perfil";
+import { Avatar } from "@/components/ui/avatar";
 import { CarregandoTela, Esqueleto } from "@/components/ui/esqueleto";
+import { Painel } from "@/components/ui/painel";
 import { TituloTela } from "@/components/ui/titulo-tela";
 import { useMetas, usePecas, usePerfil, useRegistros, useUsuario } from "@/lib/dados";
 import {
@@ -30,6 +34,7 @@ export function TelaPerfil() {
   const { data: metas = [] } = useMetas();
   const { data: perfil } = usePerfil();
   const { data: usuario } = useUsuario();
+  const [editando, setEditando] = useState(false);
 
   if (isPending || !registros) return <CarregandoTela />;
 
@@ -49,13 +54,21 @@ export function TelaPerfil() {
   return (
     <main>
       <header className="flex items-center gap-4">
-        <span className="titulo flex size-16 shrink-0 items-center justify-center rounded-full bg-tinta text-destaque text-azul">
-          {nome[0]?.toUpperCase()}
-        </span>
-        <div className="min-w-0 flex-1">
+        <button
+          type="button"
+          onClick={() => setEditando(true)}
+          aria-label="Editar perfil"
+          className="relative shrink-0"
+        >
+          <Avatar perfil={perfil} nomeReserva={nome} className="size-16" tamanhoLetra="text-destaque" />
+          <span className="absolute -bottom-0.5 -right-0.5 flex size-7 items-center justify-center rounded-full border-2 border-papel bg-marca text-white">
+            <Pencil size={13} strokeWidth={2.6} />
+          </span>
+        </button>
+        <button type="button" onClick={() => setEditando(true)} className="min-w-0 flex-1 text-left">
           <p className="truncate text-20 font-bold">{nome}</p>
           <p className="truncate text-13 text-texto-suave">{perfil?.usuario ? `@${perfil.usuario}` : usuario?.email}</p>
-        </div>
+        </button>
         <Link href="/configuracoes" aria-label="Configurações" className="flex size-12 items-center justify-center rounded-full bg-cartao">
           <Settings size={22} strokeWidth={2.2} />
         </Link>
@@ -70,7 +83,7 @@ export function TelaPerfil() {
         <Total valor={series} rotulo="séries concluídas" />
         <Total valor={horas} rotulo="horas registradas" />
         <Link href="/setup" className="col-span-2 flex items-center gap-3 rounded-[22px] bg-tinta p-4 text-white">
-          <Monitor size={24} strokeWidth={2.2} className="text-azul" />
+          <Monitor size={24} strokeWidth={2.2} className="text-conquista" />
           <span className="flex-1">
             <span className="block text-11 font-bold uppercase tracking-[0.14em] text-white/70">Meu setup</span>
             <span className="titulo text-22">{formatarCentavos(setup, true)}</span>
@@ -108,9 +121,9 @@ export function TelaPerfil() {
                 <span>{m.alvo ? `${m.feitos} de ${m.alvo}` : `${m.feitos} · sem meta`}</span>
               </div>
               {m.alvo && (
-                <div className="mt-1.5 h-2.5 overflow-hidden rounded-full bg-azul-claro">
+                <div className="mt-1.5 h-2.5 overflow-hidden rounded-full bg-marca-claro">
                   <div
-                    className={`h-full rounded-full ${m.feitos >= m.alvo ? "bg-conquista" : "bg-azul"}`}
+                    className={`h-full rounded-full ${m.feitos >= m.alvo ? "bg-conquista" : "bg-marca"}`}
                     style={{ width: `${Math.min(100, (m.feitos / m.alvo) * 100)}%` }}
                   />
                 </div>
@@ -176,7 +189,7 @@ export function TelaPerfil() {
             {eventos.map((e) => (
               <li key={`${e.href}-${e.data}`} className="relative pb-4">
                 <span
-                  className={`absolute top-1.5 -left-[27px] size-3 rounded-full ring-4 ring-papel ${e.tipo === "peca" ? "bg-azul" : "bg-conquista"}`}
+                  className={`absolute top-1.5 -left-[27px] size-3 rounded-full ring-4 ring-papel ${e.tipo === "peca" ? "bg-marca" : "bg-conquista"}`}
                   aria-hidden="true"
                 />
                 <Link href={e.href} className="block">
@@ -194,13 +207,19 @@ export function TelaPerfil() {
         <LinhaLink href="/instalar" icone={<Download size={22} strokeWidth={2.2} />} texto="Instalar o app" />
         <LinhaLink href="/configuracoes" icone={<Settings size={22} strokeWidth={2.2} />} texto="Configurações" />
       </nav>
+
+      <Painel aberto={editando} aoFechar={() => setEditando(false)} titulo="Editar perfil">
+        <div className="pt-2">
+          <FormularioPerfil aoSalvar={() => setEditando(false)} />
+        </div>
+      </Painel>
     </main>
   );
 }
 
 function Total({ valor, rotulo, destaque = false }: { valor: number; rotulo: string; destaque?: boolean }) {
   return (
-    <div className={`rounded-[22px] p-4 ${destaque ? "bg-azul text-white" : "bg-cartao"}`}>
+    <div className={`rounded-[22px] p-4 ${destaque ? "bg-marca text-white" : "bg-cartao"}`}>
       <p className="titulo text-destaque">{valor.toLocaleString("pt-BR")}</p>
       <p className={`mt-1 text-12 font-bold ${destaque ? "" : "text-texto-suave"}`}>{rotulo}</p>
     </div>
@@ -210,7 +229,7 @@ function Total({ valor, rotulo, destaque = false }: { valor: number; rotulo: str
 function LinhaLink({ href, icone, texto }: { href: string; icone: React.ReactNode; texto: string }) {
   return (
     <Link href={href} className="flex items-center gap-3 rounded-[22px] bg-cartao p-4">
-      <span className="flex size-10 items-center justify-center rounded-full bg-azul-claro text-azul-texto">{icone}</span>
+      <span className="flex size-10 items-center justify-center rounded-full bg-marca-claro text-marca-texto">{icone}</span>
       <span className="flex-1 text-corpo font-bold">{texto}</span>
       <ChevronRight size={20} strokeWidth={2.2} />
     </Link>

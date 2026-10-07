@@ -83,7 +83,7 @@ export function TelaFicha() {
       {(midia.generos.length > 0 || midia.plataformas.length > 0) && (
         <div className="mt-4 flex flex-wrap gap-2">
           {midia.generos.map((g) => (
-            <span key={g} className="rounded-full bg-azul-claro px-3 py-1.5 text-12 font-bold text-azul-texto">
+            <span key={g} className="rounded-full bg-marca-claro px-3 py-1.5 text-12 font-bold text-marca-texto">
               {g}
             </span>
           ))}
@@ -100,7 +100,7 @@ export function TelaFicha() {
           href={`/adicionar?vincular=${midia.id}&tipo=${midia.tipo}&q=${encodeURIComponent(midia.titulo)}`}
           className="mt-4 flex items-center gap-3 rounded-[22px] border-2 border-dashed border-borda p-4"
         >
-          <Link2 size={22} strokeWidth={2.2} className="shrink-0 text-azul" />
+          <Link2 size={22} strokeWidth={2.2} className="shrink-0 text-marca" />
           <span className="flex-1 text-13">
             <strong className="block text-corpo">Cadastrado à mão</strong>
             Ligue à {midia.tipo === "jogo" ? "IGDB" : "TMDB"} para trazer capa, gêneros e mais.
@@ -117,7 +117,7 @@ export function TelaFicha() {
               <p className="text-11 font-bold uppercase tracking-[0.14em] text-texto-suave">Sua nota</p>
               <p className="titulo mt-1 text-tela">{formatarNota(registro.nota)}</p>
             </div>
-            <button type="button" onClick={() => setEditando(true)} className="botao botao-azul">
+            <button type="button" onClick={() => setEditando(true)} className="botao botao-marca">
               <Pencil size={18} strokeWidth={2.2} /> Editar
             </button>
           </div>
@@ -149,8 +149,8 @@ export function TelaFicha() {
                 return (
                   <li key={chave} className="flex items-center gap-3 text-13">
                     <span className="w-28 shrink-0">{rotulo}</span>
-                    <span className="h-2.5 flex-1 overflow-hidden rounded-full bg-azul-claro">
-                      <span className="block h-full rounded-full bg-azul" style={{ width: `${valor * 10}%` }} />
+                    <span className="h-2.5 flex-1 overflow-hidden rounded-full bg-marca-claro">
+                      <span className="block h-full rounded-full bg-marca" style={{ width: `${valor * 10}%` }} />
                     </span>
                     <span className="w-8 text-right font-bold">{formatarNota(valor)}</span>
                   </li>
@@ -160,7 +160,7 @@ export function TelaFicha() {
           )}
 
           {registro.resumo && (
-            <blockquote className="mt-4 border-l-4 border-azul pl-3 text-corpo">{registro.resumo}</blockquote>
+            <blockquote className="mt-4 border-l-4 border-marca pl-3 text-corpo">{registro.resumo}</blockquote>
           )}
           {registro.tags.length > 0 && (
             <div className="mt-3 flex flex-wrap gap-2">
@@ -202,7 +202,7 @@ export function TelaFicha() {
           <h2 className="titulo text-20">Sobre</h2>
           {(midia.tempo_zerar_h || midia.duracao_min) && (
             <p className="mt-3 flex items-center gap-2 text-13 font-bold">
-              <Clock size={18} strokeWidth={2.2} className="text-azul" />
+              <Clock size={18} strokeWidth={2.2} className="text-marca" />
               {midia.tipo === "jogo"
                 ? `Em média ${formatarHoras(midia.tempo_zerar_h)} para zerar`
                 : midia.tipo === "filme"
@@ -282,7 +282,7 @@ function BlocoTemporadas({ midiaId }: { midiaId: string }) {
       </div>
       {total > 0 && (
         <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-white/20">
-          <div className="h-full rounded-full bg-azul" style={{ width: `${(vistos.length / total) * 100}%` }} />
+          <div className="h-full rounded-full bg-marca" style={{ width: `${(vistos.length / total) * 100}%` }} />
         </div>
       )}
     </Link>
@@ -314,7 +314,7 @@ function BlocoListas({ midia }: { midia: Midia }) {
                 disabled={alternar.isPending}
                 onClick={() => alternar.mutate({ listaId: l.id, midiaId: midia.id, incluir: !dentro })}
                 className={`flex min-h-11 items-center gap-1.5 rounded-full px-4 text-13 font-bold ${
-                  dentro ? "bg-azul text-white" : "bg-chip"
+                  dentro ? "bg-marca text-white" : "bg-chip"
                 }`}
               >
                 {dentro && <Check size={16} strokeWidth={2.6} />}

@@ -117,9 +117,9 @@ export function FormularioEntrar() {
   }
 
   const campo =
-    "h-14 w-full rounded-full border-2 border-borda bg-cartao px-5 text-corpo font-medium outline-none transition-colors placeholder:text-texto-suave focus:border-azul";
+    "h-14 w-full rounded-full border-2 border-borda bg-cartao px-5 text-corpo font-medium outline-none transition-colors placeholder:text-texto-suave focus:border-marca";
   const botaoPrincipal =
-    "flex h-14 w-full items-center justify-center gap-2 rounded-full bg-azul text-corpo font-bold text-white transition-colors active:bg-azul-escuro disabled:opacity-60";
+    "flex h-14 w-full items-center justify-center gap-2 rounded-full bg-marca text-corpo font-bold text-white transition-colors active:bg-marca-escuro disabled:opacity-60";
 
   if (etapa === "codigo") {
     return (

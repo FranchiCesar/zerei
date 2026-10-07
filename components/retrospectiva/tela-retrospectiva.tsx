@@ -150,7 +150,7 @@ function montarSlides(
   const slides: Slide[] = [
     {
       id: "abertura",
-      fundo: "bg-azul text-white",
+      fundo: "bg-marca text-white",
       conteudo: (
         <>
           <Mascote expressao="comemorando" className="h-44 w-auto self-start" />
@@ -193,7 +193,7 @@ function montarSlides(
   if (horas > 0 || plataforma) {
     slides.push({
       id: "horas",
-      fundo: "bg-azul-claro text-tinta",
+      fundo: "bg-marca-claro text-tinta",
       conteudo: (
         <>
           {horas > 0 && <Numerao valor={horas} legenda="horas registradas" />}
@@ -241,7 +241,7 @@ function montarSlides(
   if (genero) {
     slides.push({
       id: "genero",
-      fundo: "bg-azul text-white",
+      fundo: "bg-marca text-white",
       conteudo: (
         <>
           <p className="text-20 font-bold">Seu gênero do ano</p>
@@ -270,7 +270,7 @@ function montarSlides(
     const batida = jogos.length >= metaJogos.alvo;
     slides.push({
       id: "meta",
-      fundo: batida ? "bg-conquista text-tinta" : "bg-azul-claro text-tinta",
+      fundo: batida ? "bg-conquista text-tinta" : "bg-marca-claro text-tinta",
       conteudo: (
         <>
           <Mascote expressao={batida ? "comemorando" : "procurando"} className="h-36 w-auto self-start" />
@@ -285,7 +285,7 @@ function montarSlides(
 
   slides.push({
     id: "final",
-    fundo: "bg-azul text-white",
+    fundo: "bg-marca text-white",
     conteudo: (
       <>
         <p className="titulo text-tela">Que ano.</p>

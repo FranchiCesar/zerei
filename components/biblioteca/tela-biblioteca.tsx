@@ -116,7 +116,7 @@ export function TelaBiblioteca() {
               aria-selected={grupo === g}
               onClick={() => setGrupo(g)}
               className={`min-h-10 shrink-0 rounded-full px-4 text-12 font-bold ${
-                grupo === g ? "bg-azul text-white" : "bg-cartao"
+                grupo === g ? "bg-marca text-white" : "bg-cartao"
               }`}
             >
               {g === "todos" ? "Todos" : ROTULO_GRUPO[g]} <span className="opacity-70">{n}</span>
@@ -135,14 +135,14 @@ export function TelaBiblioteca() {
             value={texto}
             onChange={(e) => setTexto(e.target.value)}
             placeholder="Procurar"
-            className="h-12 w-full rounded-full bg-cartao pr-4 pl-11 text-corpo outline-none focus:ring-2 focus:ring-azul"
+            className="h-12 w-full rounded-full bg-cartao pr-4 pl-11 text-corpo outline-none focus:ring-2 focus:ring-marca"
           />
         </div>
         <button
           type="button"
           onClick={() => setFiltrosAbertos(true)}
           aria-label={`Filtros e ordem${filtrosAtivos ? `, ${filtrosAtivos} ativos` : ""}`}
-          className={`relative flex size-12 items-center justify-center rounded-full ${filtrosAtivos ? "bg-azul text-white" : "bg-cartao"}`}
+          className={`relative flex size-12 items-center justify-center rounded-full ${filtrosAtivos ? "bg-marca text-white" : "bg-cartao"}`}
         >
           <SlidersHorizontal size={20} strokeWidth={2.2} />
         </button>
@@ -179,7 +179,7 @@ export function TelaBiblioteca() {
                     </span>
                   )}
                   {r.favorito && (
-                    <Heart size={16} strokeWidth={2.4} className="absolute top-2 left-2 fill-azul text-white" aria-label="Favorito" />
+                    <Heart size={16} strokeWidth={2.4} className="absolute top-2 left-2 fill-marca text-white" aria-label="Favorito" />
                   )}
                 </div>
                 <p className="mt-1.5 line-clamp-2 text-12 font-bold leading-tight">{r.midia.titulo}</p>
@@ -262,7 +262,7 @@ export function TelaBiblioteca() {
             >
               Limpar
             </button>
-            <button type="button" onClick={() => setFiltrosAbertos(false)} className="botao botao-azul flex-1">
+            <button type="button" onClick={() => setFiltrosAbertos(false)} className="botao botao-marca flex-1">
               Ver {filtrados.length}
             </button>
           </div>

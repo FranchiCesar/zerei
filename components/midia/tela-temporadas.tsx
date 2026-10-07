@@ -104,7 +104,7 @@ export function TelaTemporadas() {
         )
       ) : (
         <>
-          <section className="mt-5 rounded-[28px] bg-azul p-5 text-white shadow-destaque">
+          <section className="mt-5 rounded-[28px] bg-marca p-5 text-white shadow-destaque">
             <p className="text-13 font-bold">
               {vistosValidos} de {total} episódios
             </p>
@@ -114,7 +114,7 @@ export function TelaTemporadas() {
               aria-valuenow={vistosValidos}
               aria-valuemin={0}
               aria-valuemax={total}
-              className="mt-2 h-2.5 overflow-hidden rounded-full bg-azul-escuro"
+              className="mt-2 h-2.5 overflow-hidden rounded-full bg-marca-escuro"
             >
               <div className="h-full rounded-full bg-tinta" style={{ width: `${total ? (vistosValidos / total) * 100 : 0}%` }} />
             </div>
@@ -187,8 +187,8 @@ function ItemTemporada({
             <span className="block text-12 text-texto-suave">
               {feitos}/{t.total_episodios} episódios{nota != null ? ` · nota ${formatarNota(nota)}` : ""}
             </span>
-            <span className="mt-1.5 block h-2 overflow-hidden rounded-full bg-azul-claro">
-              <span className="block h-full rounded-full bg-azul" style={{ width: `${(feitos / t.total_episodios) * 100}%` }} />
+            <span className="mt-1.5 block h-2 overflow-hidden rounded-full bg-marca-claro">
+              <span className="block h-full rounded-full bg-marca" style={{ width: `${(feitos / t.total_episodios) * 100}%` }} />
             </span>
           </span>
         </summary>
@@ -204,7 +204,7 @@ function ItemTemporada({
                 aria-label={`Episódio ${e.episodio}${marcado ? ", visto" : ""}`}
                 onClick={() => aoMarcar([e], !marcado)}
                 className={`flex h-11 items-center justify-center rounded-[14px] text-13 font-bold ${
-                  marcado ? "bg-azul text-white" : "bg-chip"
+                  marcado ? "bg-marca text-white" : "bg-chip"
                 }`}
               >
                 {e.episodio}
@@ -272,7 +272,7 @@ function DefinirTemporadas({ midiaId }: { midiaId: string }) {
         Episódios de cada temporada, separados por vírgula.
       </label>
       <input id="eps" className="campo mt-2" value={texto} onChange={(e) => setTexto(e.target.value)} placeholder="10, 8, 10" />
-      <button type="submit" disabled={salvando} className="botao botao-azul mt-3 w-full">
+      <button type="submit" disabled={salvando} className="botao botao-marca mt-3 w-full">
         {salvando ? "Salvando..." : "Salvar temporadas"}
       </button>
     </form>

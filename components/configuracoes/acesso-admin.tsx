@@ -19,7 +19,7 @@ export function AcessoAdmin() {
   return (
     <section className="mt-4 rounded-[24px] bg-cartao p-5">
       <h2 className="titulo flex items-center gap-2 text-20">
-        <ShieldCheck size={22} strokeWidth={2.2} className="text-azul" /> Quem pode entrar
+        <ShieldCheck size={22} strokeWidth={2.2} className="text-marca" /> Quem pode entrar
       </h2>
       <p className="mt-1 text-13 text-texto-suave">
         Só estes e-mails recebem código e conseguem criar conta. Você é o administrador.
@@ -49,7 +49,7 @@ export function AcessoAdmin() {
           type="submit"
           disabled={adicionar.isPending}
           aria-label="Liberar e-mail"
-          className="flex size-12 shrink-0 items-center justify-center rounded-full bg-azul text-white disabled:opacity-60"
+          className="flex size-12 shrink-0 items-center justify-center rounded-full bg-marca text-white disabled:opacity-60"
         >
           <UserPlus size={20} strokeWidth={2.2} />
         </button>

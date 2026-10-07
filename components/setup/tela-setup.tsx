@@ -40,7 +40,7 @@ export function TelaSetup() {
   return (
     <main>
       <Topo voltarPara="/perfil">
-        <Link href="/setup/nova" className="botao botao-azul">
+        <Link href="/setup/nova" className="botao botao-marca">
           <Plus size={20} strokeWidth={2.4} /> Peça
         </Link>
       </Topo>
@@ -54,7 +54,7 @@ export function TelaSetup() {
         <EstadoVazio expressao="dormindo" titulo="Seu setup está sem peças." texto="Comece pela principal." />
       ) : (
         <>
-          <section className="mt-5 rounded-[28px] bg-azul p-5 text-white shadow-destaque">
+          <section className="mt-5 rounded-[28px] bg-marca p-5 text-white shadow-destaque">
             <p className="text-11 font-bold uppercase tracking-[0.14em] text-white/80">Valor do setup</p>
             <p className="titulo mt-1 text-[40px] leading-none">{formatarCentavos(totalAtual, true)}</p>
             <p className="mt-2 text-13 font-bold">
@@ -68,7 +68,7 @@ export function TelaSetup() {
                     <span>{d.rotulo}</span>
                     <span>{formatarCentavos(d.total, true)}</span>
                   </div>
-                  <div className="mt-1 h-2 overflow-hidden rounded-full bg-azul-escuro">
+                  <div className="mt-1 h-2 overflow-hidden rounded-full bg-marca-escuro">
                     <div className="h-full rounded-full bg-tinta" style={{ width: `${(d.total / totalAtual) * 100}%` }} />
                   </div>
                 </li>
@@ -153,7 +153,7 @@ function Galeria() {
           onClick={() => entrada.current?.click()}
           className="flex h-32 w-28 shrink-0 flex-col items-center justify-center gap-2 rounded-[20px] border-2 border-dashed border-borda text-13 font-bold"
         >
-          <ImagePlus size={24} strokeWidth={2.2} className="text-azul" />
+          <ImagePlus size={24} strokeWidth={2.2} className="text-marca" />
           Adicionar foto
         </button>
         {fotos.map((f) => (
@@ -203,7 +203,7 @@ function Galeria() {
             <label htmlFor="legenda" className="rotulo">Legenda (opcional)</label>
             <input id="legenda" className="campo" value={legenda} onChange={(e) => setLegenda(e.target.value)} maxLength={120} placeholder="Setup novo, RGB ligado" />
           </div>
-          <button type="submit" disabled={adicionar.isPending} className="botao botao-azul w-full">
+          <button type="submit" disabled={adicionar.isPending} className="botao botao-marca w-full">
             {adicionar.isPending ? "Enviando..." : "Salvar na galeria"}
           </button>
         </form>

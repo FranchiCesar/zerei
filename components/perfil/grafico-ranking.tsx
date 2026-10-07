@@ -3,7 +3,7 @@
 import { Bar, BarChart, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 /**
- * Ranking em barras horizontais, uma série só: um tom (azul da marca), sem legenda,
+ * Ranking em barras horizontais, uma série só: um tom (roxo da marca), sem legenda,
  * valor escrito na ponta da barra e tooltip ao tocar. Acima de 6 itens, o resto vira "Outros".
  */
 export function GraficoRanking({
@@ -47,7 +47,7 @@ export function GraficoRanking({
               }}
               labelStyle={{ fontWeight: 700 }}
             />
-            <Bar dataKey="total" fill="var(--azul)" radius={[0, 4, 4, 0]} barSize={18} isAnimationActive={false}>
+            <Bar dataKey="total" fill="var(--marca)" radius={[0, 4, 4, 0]} barSize={18} isAnimationActive={false}>
               <LabelList dataKey="total" position="right" style={{ fill: "var(--texto)", fontSize: 12, fontWeight: 700 }} />
             </Bar>
           </BarChart>

@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";
+import { MASCOTE_SVG } from "@/components/ui/mascote";
 import { naoAutorizado, usuarioLogado } from "@/lib/api";
 
 // Cartão compartilhável (1080x1350, formato de post) gerado no servidor.
@@ -7,13 +8,18 @@ const LARGURA = 1080;
 const ALTURA = 1350;
 
 const COR = {
-  azul: "#2F6BFF",
-  azulEscuro: "#1A47C9",
-  azulClaro: "#DCE7FF",
-  tinta: "#0E0E0E",
-  papel: "#ECEAE1",
-  conquista: "#B6FF3B",
+  marca: "#7C4DFF",
+  marcaEscuro: "#5B2EE0",
+  marcaClaro: "#ECE5FF",
+  tinta: "#00262B",
+  papel: "#F4F4F4",
+  conquista: "#5CE481",
 };
+
+// Mascote em SVG para o rodapé (o Satori desenha imagens, não componentes com hooks)
+const MASCOTE = `data:image/svg+xml;utf8,${encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="120 30 460 630"><defs><linearGradient id="d" x1="350.75" y1="105.737" x2="350.75" y2="585.409" gradientUnits="userSpaceOnUse"><stop stop-color="#9E75FE"/><stop offset="0.15" stop-color="#AD6FFF"/><stop offset="0.48" stop-color="#5CE481"/><stop offset="1" stop-color="#5CE481"/></linearGradient></defs><path d="${MASCOTE_SVG.HALO}" fill="url(#d)"/><path d="${MASCOTE_SVG.FORMA}" fill="${MASCOTE_SVG.CORPO}"/><path d="${MASCOTE_SVG.CONTORNO}" fill="${MASCOTE_SVG.TINTA}"/><path d="M275.5 265.5V317M378 266V317.5" stroke="${MASCOTE_SVG.TINTA}" stroke-width="66" stroke-linecap="round"/></svg>`,
+)}`;
 
 // Fontes da marca, baixadas uma vez por instância do servidor
 let fontes: Promise<{ name: string; data: ArrayBuffer; weight: 700 | 800 }[]> | null = null;
@@ -54,7 +60,7 @@ function CapaCartao({ item, largura }: { item: ItemCartao; largura: number }) {
         height: altura,
         borderRadius: 24,
         background: COR.tinta,
-        color: COR.azul,
+        color: COR.conquista,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -67,7 +73,7 @@ function CapaCartao({ item, largura }: { item: ItemCartao; largura: number }) {
   );
 }
 
-function Moldura({ children, fundo = COR.azul, cor = "#fff" }: { children: React.ReactNode; fundo?: string; cor?: string }) {
+function Moldura({ children, fundo = COR.marca, cor = "#fff" }: { children: React.ReactNode; fundo?: string; cor?: string }) {
   return (
     <div
       style={{
@@ -83,7 +89,11 @@ function Moldura({ children, fundo = COR.azul, cor = "#fff" }: { children: React
     >
       {children}
       <div style={{ marginTop: "auto", display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 30 }}>
-        <span style={{ fontFamily: "Bricolage", fontSize: 56 }}>Zerei</span>
+        <span style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element -- renderizado pelo Satori */}
+          <img src={MASCOTE} width={64} height={88} alt="" />
+          <span style={{ fontFamily: "Bricolage", fontSize: 56 }}>Zerei</span>
+        </span>
         <span>Tudo que você zerou, assistiu e montou.</span>
       </div>
     </div>
@@ -165,7 +175,7 @@ export async function GET(request: NextRequest) {
     const horas = Math.round(lista.reduce((s, r) => s + (r.horas ?? 0), 0));
 
     const numero = (valor: number, legenda: string) => (
-      <div style={{ display: "flex", flexDirection: "column", background: COR.azulEscuro, borderRadius: 32, padding: "28px 32px", flex: 1 }}>
+      <div style={{ display: "flex", flexDirection: "column", background: COR.marcaEscuro, borderRadius: 32, padding: "28px 32px", flex: 1 }}>
         <span style={{ fontFamily: "Bricolage", fontSize: 96, lineHeight: 1 }}>{valor}</span>
         <span style={{ fontSize: 28 }}>{legenda}</span>
       </div>

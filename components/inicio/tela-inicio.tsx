@@ -5,6 +5,7 @@ import { useState } from "react";
 import { ArrowRight, ChevronRight, LayoutGrid, Star } from "lucide-react";
 import { EditarRegistro } from "@/components/midia/editar-registro";
 import { AvisoInstalar } from "@/components/pwa/aviso-instalar";
+import { Avatar } from "@/components/ui/avatar";
 import { Capa } from "@/components/ui/capa";
 import { CarregandoTela } from "@/components/ui/esqueleto";
 import { Mascote } from "@/components/ui/mascote";
@@ -49,28 +50,21 @@ export function TelaInicio() {
   const metasAno = progressoMetas(registros, metas, ano);
   const metaJogos = metasAno[0];
   const pecasEmUso = pecas.filter((p) => p.status !== "vendido");
-  const inicial = (perfil?.nome ?? "Z").trim()[0]?.toUpperCase() ?? "Z";
+  const primeiroNome = perfil?.nome?.trim().split(/\s+/)[0] || "Você";
 
   return (
     <main>
-      <header className="flex items-center justify-between">
-        <Link
-          href="/setup"
-          aria-label="Meu setup"
-          className="flex size-12 items-center justify-center rounded-full bg-cartao"
-        >
-          <LayoutGrid size={22} strokeWidth={2.2} />
+      <header className="flex items-center justify-between gap-3">
+        <Link href="/perfil" aria-label="Perfil" className="flex min-w-0 items-center gap-2.5 rounded-full bg-cartao py-1 pl-1 pr-4">
+          <Avatar perfil={perfil} className="size-11" tamanhoLetra="text-20" />
+          <span className="truncate text-corpo font-bold">{primeiroNome}</span>
         </Link>
-        <Link href="/biblioteca?tipo=jogo&grupo=concluido" className="flex items-center gap-1.5 text-20 font-bold">
+        <Link
+          href="/biblioteca?tipo=jogo&grupo=concluido"
+          className="flex shrink-0 items-center gap-1.5 rounded-full bg-tinta py-2.5 pl-4 pr-3.5 text-corpo font-bold text-white"
+        >
           {zerados} {zerados === 1 ? "zerado" : "zerados"}
-          <Star size={20} strokeWidth={2.2} className="fill-azul text-texto" />
-        </Link>
-        <Link
-          href="/perfil"
-          aria-label="Perfil"
-          className="titulo flex size-12 items-center justify-center rounded-full bg-tinta text-20 text-azul"
-        >
-          {inicial}
+          <Star size={18} strokeWidth={2.2} className="fill-conquista text-conquista" />
         </Link>
       </header>
 
@@ -83,8 +77,8 @@ export function TelaInicio() {
       </TituloTela>
 
       {jogando.length === 0 ? (
-        <section className="relative mt-5 overflow-hidden rounded-[28px] bg-azul p-5 text-white shadow-destaque">
-          <Mascote expressao="dormindo" className="pointer-events-none absolute -right-4 top-6 h-36 w-auto" />
+        <section className="relative mt-5 overflow-hidden rounded-[28px] bg-marca p-5 text-white shadow-destaque">
+          <Mascote expressao="dormindo" className="pointer-events-none absolute right-3 top-5 h-36 w-auto" />
           <div className="relative max-w-[62%]">
             <h2 className="titulo text-destaque">Nada rolando.</h2>
             <p className="mt-2 text-13 font-bold">Escolha o próximo da fila e marque como Jogando.</p>
@@ -227,7 +221,7 @@ export function TelaInicio() {
 
       {/* Atalho do setup */}
       <Link href="/setup" className="mt-6 flex items-center gap-4 rounded-[24px] bg-tinta p-5 text-white">
-        <LayoutGrid size={28} strokeWidth={2.2} className="text-azul" />
+        <LayoutGrid size={28} strokeWidth={2.2} className="text-conquista" />
         <div className="flex-1">
           <p className="text-20 font-bold">Meu setup</p>
           <p className="text-13 text-white/70">
@@ -267,11 +261,11 @@ function CartaoJogando({
 
   return (
     <section
-      className={`relative shrink-0 snap-start overflow-hidden rounded-[28px] bg-azul p-5 text-white shadow-destaque ${
+      className={`relative shrink-0 snap-start overflow-hidden rounded-[28px] bg-marca p-5 text-white shadow-destaque ${
         sozinho ? "w-full" : "w-[88%]"
       }`}
     >
-      <Mascote className="pointer-events-none absolute -right-4 top-10 h-40 w-auto" />
+      <Mascote className="pointer-events-none absolute right-3 top-8 h-36 w-auto" />
       <Link href={`/midia/${r.midia_id}`} className="relative block">
         {chip && (
           <span className="inline-block rounded-full bg-cartao px-3 py-1.5 text-12 font-bold text-texto">{chip}</span>
@@ -284,7 +278,7 @@ function CartaoJogando({
           aria-valuenow={pct}
           aria-valuemin={0}
           aria-valuemax={100}
-          className="mt-3 h-2.5 w-[58%] overflow-hidden rounded-full bg-azul-escuro"
+          className="mt-3 h-2.5 w-[58%] overflow-hidden rounded-full bg-marca-escuro"
         >
           <div className="h-full rounded-full bg-tinta" style={{ width: `${pct}%` }} />
         </div>
@@ -324,8 +318,8 @@ function CartaoAssistindo({ registro: r }: { registro: RegistroComMidia }) {
             {proximo ? `Próximo: ${proximo}` : total ? "Tudo visto!" : "Sem temporadas cadastradas"}
           </p>
           {total > 0 && (
-            <div className="mt-2 h-2 overflow-hidden rounded-full bg-azul-claro">
-              <div className="h-full rounded-full bg-azul" style={{ width: `${(vistos.length / total) * 100}%` }} />
+            <div className="mt-2 h-2 overflow-hidden rounded-full bg-marca-claro">
+              <div className="h-full rounded-full bg-marca" style={{ width: `${(vistos.length / total) * 100}%` }} />
             </div>
           )}
         </div>
@@ -347,7 +341,7 @@ function PontosMeta({ feitos, alvo }: { feitos: number; alvo: number }) {
         <li
           key={i}
           className={`size-5 rounded-full border-2 ${
-            i < cheios ? `border-texto ${batida ? "bg-conquista" : "bg-azul"}` : "border-borda"
+            i < cheios ? `border-texto ${batida ? "bg-conquista" : "bg-marca"}` : "border-borda"
           }`}
         />
       ))}

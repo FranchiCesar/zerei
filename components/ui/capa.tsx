@@ -1,7 +1,7 @@
 import type { Midia } from "@/lib/tipos";
 
 // Sem capa: bloco com a inicial, nas cores da marca (como no mockup)
-const FUNDOS = ["bg-tinta text-azul", "bg-azul text-tinta", "bg-[#D6D3C4] text-tinta", "bg-azul-claro text-azul-texto"];
+const FUNDOS = ["bg-tinta text-conquista", "bg-marca text-white", "bg-conquista text-tinta", "bg-marca-claro text-marca-texto"];
 
 function corPorTitulo(titulo: string) {
   let soma = 0;

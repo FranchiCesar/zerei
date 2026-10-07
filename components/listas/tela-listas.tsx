@@ -25,7 +25,7 @@ export function TelaListas() {
     <main>
       <div className="flex items-end justify-between gap-3">
         <TituloTela>Listas</TituloTela>
-        <button type="button" onClick={() => setNovaAberta(true)} className="botao botao-azul shrink-0">
+        <button type="button" onClick={() => setNovaAberta(true)} className="botao botao-marca shrink-0">
           <Plus size={20} strokeWidth={2.4} /> Nova
         </button>
       </div>
@@ -63,7 +63,7 @@ function Mosaico({ lista }: { lista: ListaComItens }) {
   const capas = lista.itens.slice(0, 4);
   if (capas.length === 0) {
     return (
-      <div className="titulo flex aspect-square items-center justify-center rounded-[18px] bg-azul-claro text-tela text-azul-texto">
+      <div className="titulo flex aspect-square items-center justify-center rounded-[18px] bg-marca-claro text-tela text-marca-texto">
         {lista.nome[0]?.toUpperCase()}
       </div>
     );
@@ -122,7 +122,7 @@ export function NovaLista({
           <label htmlFor="lista-desc" className="rotulo">Descrição (opcional)</label>
           <textarea id="lista-desc" rows={2} className="campo resize-none" value={descricao} onChange={(e) => setDescricao(e.target.value)} maxLength={300} />
         </div>
-        <button type="submit" disabled={criar.isPending} className="botao botao-azul w-full">
+        <button type="submit" disabled={criar.isPending} className="botao botao-marca w-full">
           {criar.isPending ? "Criando..." : "Criar lista"}
         </button>
       </form>

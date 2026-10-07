@@ -77,7 +77,7 @@ export function usePerfil() {
 export function useAtualizarPerfil() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (campos: Partial<Pick<Perfil, "nome" | "usuario">>) =>
+    mutationFn: async (campos: Partial<Pick<Perfil, "nome" | "usuario" | "avatar_url">>) =>
       ok(await sb().from("perfis").update(campos).eq("id", await idUsuario()).select().single()),
     onSuccess: (perfil) => {
       qc.setQueryData(chaves.perfil, perfil);
@@ -85,6 +85,27 @@ export function useAtualizarPerfil() {
     },
     onError: (e: { code?: string }) =>
       avisarErro(e, e.code === "23505" ? "Esse nome de usuário já existe." : "Não deu para salvar o perfil."),
+  });
+}
+
+/** Troca (ou tira, com null) a foto de perfil. A foto antiga sai do armazenamento. */
+export function useTrocarFotoPerfil() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (arquivo: File | null) => {
+      const anterior = qc.getQueryData<Perfil | null>(chaves.perfil)?.avatar_url ?? null;
+      const url = arquivo ? await enviarFoto(arquivo, "perfil", 512) : null;
+      const perfil = ok<Perfil>(
+        await sb().from("perfis").update({ avatar_url: url }).eq("id", await idUsuario()).select().single(),
+      );
+      if (anterior) await apagarFoto(anterior);
+      return perfil;
+    },
+    onSuccess: (perfil) => {
+      qc.setQueryData(chaves.perfil, perfil);
+      mostrarAviso(perfil.avatar_url ? "Foto atualizada." : "Foto removida.");
+    },
+    onError: (e) => avisarErro(e, "Não deu para trocar a foto."),
   });
 }
 
@@ -557,9 +578,9 @@ export function useApagarFotoSetup() {
 }
 
 /** Reduz a foto (até 1600 px, WebP) antes de enviar: economiza dados e armazenamento. */
-async function comprimir(arquivo: File): Promise<Blob> {
+async function comprimir(arquivo: File, maximo = 1600): Promise<Blob> {
   const imagem = await createImageBitmap(arquivo);
-  const escala = Math.min(1, 1600 / Math.max(imagem.width, imagem.height));
+  const escala = Math.min(1, maximo / Math.max(imagem.width, imagem.height));
   const canvas = document.createElement("canvas");
   canvas.width = Math.round(imagem.width * escala);
   canvas.height = Math.round(imagem.height * escala);
@@ -569,12 +590,12 @@ async function comprimir(arquivo: File): Promise<Blob> {
   );
 }
 
-export async function enviarFoto(arquivo: File, pasta: "pecas" | "setup") {
+export async function enviarFoto(arquivo: File, pasta: "pecas" | "setup" | "perfil", maximo?: number) {
   const usuario = await idUsuario();
   const caminho = `${usuario}/${pasta}/${crypto.randomUUID()}.webp`;
   const { error } = await sb()
     .storage.from("fotos")
-    .upload(caminho, await comprimir(arquivo), { contentType: "image/webp", cacheControl: "31536000" });
+    .upload(caminho, await comprimir(arquivo, maximo), { contentType: "image/webp", cacheControl: "31536000" });
   if (error) throw error;
   return sb().storage.from("fotos").getPublicUrl(caminho).data.publicUrl;
 }

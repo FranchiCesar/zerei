@@ -21,7 +21,7 @@ export function GuardaAcesso({ children }: { children: React.ReactNode }) {
 
   return (
     <main className="flex min-h-[70dvh] flex-col items-center justify-center text-center">
-      <Mascote expressao="dormindo" className="h-36 w-auto" />
+      <Mascote expressao="triste" className="h-36 w-auto" />
       <h1 className="titulo mt-6 text-destaque">Sem acesso por aqui.</h1>
       <p className="mt-3 max-w-72 text-corpo text-texto-suave">
         Este e-mail não está liberado no Zerei. Peça ao administrador para liberar.
@@ -34,7 +34,7 @@ export function GuardaAcesso({ children }: { children: React.ReactNode }) {
           await limparCopiaLocal();
           router.replace("/entrar");
         }}
-        className="botao botao-azul mt-6"
+        className="botao botao-marca mt-6"
       >
         <LogOut size={18} strokeWidth={2.2} /> Sair
       </button>

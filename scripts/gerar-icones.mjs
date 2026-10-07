@@ -1,25 +1,36 @@
-// Gera os ícones do PWA a partir do SVG do logo.
-// Uso: node scripts/gerar-icones.mjs
-import { mkdir, writeFile } from "node:fs/promises";
+// Gera os ícones do PWA a partir do mascote (components/ui/mascote.tsx).
+// Uso: npm run icones
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import sharp from "sharp";
 
-const AZUL = "#2F6BFF";
+const FUNDO = "#00262B";
 
-// "Z" branco cujo traço final vira um check.
-const marca = `
-  <path d="M112 142 H306 L112 322 H232 L288 376 L404 236"
-    fill="none" stroke="#FFFFFF" stroke-width="52"
-    stroke-linecap="round" stroke-linejoin="round" />`;
+const fonte = await readFile("components/ui/mascote.tsx", "utf8");
+const caminho = (nome) => fonte.match(new RegExp(`const ${nome} =[\\s]*"([^"]+)"`))[1];
 
-// Ícone comum: quadrado azul com cantos arredondados.
+// Mascote centralizado (desenho original: 434 x 600, centro em 350.75, 346.5)
+const mascote = (escala) => `
+  <defs>
+    <linearGradient id="d" x1="350.75" y1="105.737" x2="350.75" y2="585.409" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9E75FE" /><stop offset="0.15" stop-color="#AD6FFF" />
+      <stop offset="0.48" stop-color="#5CE481" /><stop offset="1" stop-color="#5CE481" />
+    </linearGradient>
+  </defs>
+  <g transform="translate(256 262) scale(${escala}) translate(-350.75 -346.5)">
+    <path d="${caminho("HALO")}" fill="url(#d)" />
+    <path d="${caminho("FORMA")}" fill="#F4F4F4" />
+    <path d="${caminho("CONTORNO")}" fill="#00262B" />
+    <path d="M275.5 265.5V317M378 266V317.5" stroke="#00262B" stroke-width="66" stroke-linecap="round" />
+  </g>`;
+
+// Ícone comum: quadrado petróleo com cantos arredondados.
 const svgPadrao = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="112" fill="${AZUL}" />${marca}
+  <rect width="512" height="512" rx="112" fill="${FUNDO}" />${mascote(0.66)}
 </svg>`;
 
-// Maskable/Apple: fundo cheio e marca reduzida para caber na zona segura.
+// Maskable/Apple: fundo cheio e mascote reduzido para caber na zona segura.
 const svgCheio = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" fill="${AZUL}" />
-  <g transform="translate(256 256) scale(0.78) translate(-256 -256)">${marca}</g>
+  <rect width="512" height="512" fill="${FUNDO}" />${mascote(0.5)}
 </svg>`;
 
 const saidas = [

@@ -149,7 +149,7 @@ function Formulario({
               type="button"
               aria-pressed={status === s}
               onClick={() => setStatus(s)}
-              className={`min-h-11 rounded-full px-4 text-13 font-bold ${status === s ? "bg-azul text-white" : "bg-chip"}`}
+              className={`min-h-11 rounded-full px-4 text-13 font-bold ${status === s ? "bg-marca text-white" : "bg-chip"}`}
             >
               {rotuloStatus(s, tipo)}
             </button>
@@ -159,7 +159,7 @@ function Formulario({
 
       {erro && <p role="alert" className="text-13 font-bold text-perigo">{erro}</p>}
 
-      <button type="submit" disabled={criar.isPending} className="botao botao-azul w-full">
+      <button type="submit" disabled={criar.isPending} className="botao botao-marca w-full">
         {criar.isPending ? "Cadastrando..." : "Cadastrar"}
       </button>
     </form>

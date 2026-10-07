@@ -84,31 +84,33 @@ Navegação inferior de 5 itens: Início, Biblioteca, Adicionar (botão central)
 | 15 | Configurações | Conta, tema, metas, exportar dados, sair |
 
 ## Identidade visual
-Fundo off-white com linhas de relevo, preto forte, cartões bem arredondados, mascote em traço grosso, azul elétrico.
+Inspirada no mascote (fantasminha): fundo claro com linhas de relevo, petróleo profundo, roxo elétrico e verde de conquista, com o degradê roxo → verde como assinatura.
 
 ### Cores (modo claro) — definidas como variáveis CSS em `app/globals.css`
 | Token | Hex | Uso |
 |---|---|---|
-| azul | #2F6BFF | Cor principal: cartão em destaque, botão central, ícone ativo |
-| azul-escuro | #1A47C9 | Estado pressionado e texto azul sobre fundo claro |
-| azul-claro | #DCE7FF | Fundos de chips, seleção e barras vazias |
-| tinta | #0E0E0E | Texto, navegação inferior, contornos do mascote |
-| papel | #ECEAE1 | Fundo das telas, com linhas de relevo a 5% de opacidade |
+| marca | #7C4DFF | Cor principal: cartão em destaque, botão central, botões primários |
+| marca-escuro | #5B2EE0 | Estado pressionado |
+| marca-claro | #ECE5FF | Fundos de chips, seleção e barras vazias |
+| marca-texto | #5B2EE0 | Texto roxo sobre fundo claro |
+| tinta | #00262B | Texto, navegação inferior, contorno do mascote |
+| papel | #F4F4F4 | Fundo das telas, com linhas de relevo a 5% de opacidade |
 | cartao | #FFFFFF | Cartões e botões em pílula |
-| texto-suave | #5A574D | Legendas e informações secundárias |
-| conquista | #B6FF3B | Só para Zerado, metas batidas e retrospectiva |
+| texto-suave | #4C6366 | Legendas e informações secundárias |
+| conquista | #5CE481 | Zerado, metas batidas, retrospectiva e destaque sobre fundo tinta (ícone ativo da navegação) |
+| gradiente | #9E75FE → #AD6FFF → #5CE481 | Halo do mascote e anel da foto de perfil (`bg-gradiente`) |
 
-Texto branco sobre azul tem contraste 4,5:1; em textos pequenos sobre azul, prefira peso 700.
-Modo escuro: papel → #121318, cartao → #1C1E26, azul → #5B8CFF.
+Texto branco sobre marca tem contraste 4,8:1.
+Modo escuro: papel → #08181B, cartao → #112529, marca → #8457FF.
 
 ### Cores de status
 | Status | Hex |
 |---|---|
-| Jogando ou Assistindo | #2F6BFF |
+| Jogando ou Assistindo | #7C4DFF |
 | Na fila ou Quero ver | #F2A93B |
-| Zerado ou Concluído | #B6FF3B com texto preto |
+| Zerado ou Concluído | #5CE481 com texto tinta |
 | Pausado | #9AA3B5 |
-| Abandonado | #3A3A3A com texto branco |
+| Abandonado | #2B3F42 com texto branco |
 
 ### Tipografia
 - Títulos: Bricolage Grotesque, peso 800, entrelinha 0,95 e espaçamento negativo
@@ -118,14 +120,15 @@ Modo escuro: papel → #121318, cartao → #1C1E26, azul → #5B8CFF.
 ### Formas e componentes
 - Raios: 28 nos cartões grandes, 20 a 24 nos médios, pílula (999) em botões e chips
 - Botões redondos de 48 px no topo; alvo de toque mínimo de 44 px
-- Navegação inferior flutuante em preto, com botão central azul de 56 px elevado
+- Navegação inferior flutuante em tinta, com botão central roxo de 56 px elevado
 - Sombra única e suave nos cartões em destaque; o resto é plano
 - Ícones em traço de 2,2 px, cantos arredondados (Lucide)
 
 ### Logo, ícone e mascote
-- Marca: "Zerei" em Bricolage Grotesque 800, preto
-- Ícone: um "Z" branco cujo traço final vira um check, sobre quadrado azul com cantos arredondados
-- Mascote: monstrinho de um olho só, traço preto grosso, corpo azul-claro e chifres. Aparece em estados vazios, conquistas e retrospectiva, com expressões (comemorando, dormindo, procurando)
+- Marca: "Zerei" em Bricolage Grotesque 800, cor tinta
+- Ícone: o mascote sobre quadrado tinta (#00262B) com cantos arredondados (`npm run icones` gera a partir de `components/ui/mascote.tsx`)
+- Mascote: fantasminha de corpo claro (#F4F4F4), base em zigue-zague, contorno tinta, halo em degradê roxo → verde e olhos em barra. Expressões em `<Mascote expressao>`: neutro, comemorando (olhos ^ ^, boca aberta e brilhos), dormindo (olhos fechados e "z"), procurando (olhar de lado) e triste (sem acesso)
+- Topo da Início: à esquerda, foto e primeiro nome (leva ao Perfil); à direita, a contagem de zerados. Foto e nome se editam tocando na foto do Perfil ou em Configurações → Conta (foto vai para `fotos/{uid}/perfil/`)
 
 ### Tom de voz
 Direto, bem-humorado e gamer, em português do Brasil e sem gírias forçadas.
@@ -199,7 +202,7 @@ public/icons/
 
 ## Etapas
 1. **Base do projeto** — Next.js + TS + Tailwind, tokens de cor, fontes, navegação inferior com 5 itens. ✅
-2. **PWA** — Serwist: manifesto "Zerei", ícones, cor de tema azul, instalação guiada para iPhone. ✅
+2. **PWA** — Serwist: manifesto "Zerei", ícones, cor de tema tinta, instalação guiada para iPhone. ✅
 3. **Supabase e login** — migrações do modelo de dados com RLS, login com Google e e-mail. ✅ (código pronto; falta aplicar a migração e configurar o Google)
 4. **Busca e ficha** — rotas de API IGDB/TMDB, tela Adicionar com busca única, Ficha da mídia com cache em `midias`.
 5. **Biblioteca** — filtro de tipo, abas por status, filtros, ordenação, painel de editar registro.

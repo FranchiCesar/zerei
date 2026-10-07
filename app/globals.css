@@ -1,67 +1,70 @@
 @import "tailwindcss";
 
 /* Tokens da marca (ver CLAUDE.md > Identidade visual) */
+/* Tokens da marca (ver CLAUDE.md > Identidade visual). Paleta tirada do mascote:
+   roxo #9E75FE → verde #5CE481, contorno petróleo #00262B, corpo #F4F4F4. */
 :root {
-  --azul: #2f6bff;
-  --azul-escuro: #1a47c9;
-  --azul-claro: #dce7ff;
-  --tinta: #0e0e0e;
-  --papel: #eceae1;
+  --marca: #7c4dff;
+  --marca-escuro: #5b2ee0;
+  --marca-claro: #ece5ff;
+  --tinta: #00262b;
+  --papel: #f4f4f4;
   --cartao: #ffffff;
-  --texto: #0e0e0e;
-  --texto-suave: #5a574d;
-  --conquista: #b6ff3b;
-  --chip: #eceae1;
-  --borda: #cfcbbd;
-  --azul-texto: #1a47c9;
+  --texto: #00262b;
+  --texto-suave: #4c6366;
+  --conquista: #5ce481;
+  --chip: #e9e9ef;
+  --borda: #cdd3d6;
+  --marca-texto: #5b2ee0;
   --perigo: #c2412d;
-  --linha-relevo: rgb(14 14 14 / 0.05);
+  --linha-relevo: rgb(0 38 43 / 0.05);
+  --gradiente: linear-gradient(135deg, #9e75fe 0%, #ad6fff 30%, #5ce481 100%);
 
-  --status-ativo: #2f6bff;
+  --status-ativo: #7c4dff;
   --status-fila: #f2a93b;
-  --status-zerado: #b6ff3b;
+  --status-zerado: #5ce481;
   --status-pausado: #9aa3b5;
-  --status-abandonado: #3a3a3a;
+  --status-abandonado: #2b3f42;
 
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --azul: #5b8cff;
-    --azul-claro: #26324f;
-    --papel: #121318;
-    --cartao: #1c1e26;
-    --texto: #f2f1ec;
-    --texto-suave: #a4a196;
-    --chip: #2a2d38;
-    --borda: #3a3d48;
-    --azul-texto: #a9c1ff;
+    --marca: #8457ff;
+    --marca-claro: #2a2350;
+    --papel: #08181b;
+    --cartao: #112529;
+    --texto: #eef3f1;
+    --texto-suave: #9bb0ae;
+    --chip: #1b3236;
+    --borda: #2c4549;
+    --marca-texto: #c4b0ff;
     --perigo: #ff8a75;
-    --linha-relevo: rgb(255 255 255 / 0.04);
+    --linha-relevo: rgb(255 255 255 / 0.035);
     color-scheme: dark;
   }
 }
 
 :root[data-theme="dark"] {
-  --azul: #5b8cff;
-  --azul-claro: #26324f;
-  --papel: #121318;
-  --cartao: #1c1e26;
-  --texto: #f2f1ec;
-  --texto-suave: #a4a196;
-  --chip: #2a2d38;
-  --borda: #3a3d48;
-  --azul-texto: #a9c1ff;
+  --marca: #8457ff;
+  --marca-claro: #2a2350;
+  --papel: #08181b;
+  --cartao: #112529;
+  --texto: #eef3f1;
+  --texto-suave: #9bb0ae;
+  --chip: #1b3236;
+  --borda: #2c4549;
+  --marca-texto: #c4b0ff;
   --perigo: #ff8a75;
-  --linha-relevo: rgb(255 255 255 / 0.04);
+  --linha-relevo: rgb(255 255 255 / 0.035);
   color-scheme: dark;
 }
 
 @theme inline {
-  --color-azul: var(--azul);
-  --color-azul-escuro: var(--azul-escuro);
-  --color-azul-claro: var(--azul-claro);
+  --color-marca: var(--marca);
+  --color-marca-escuro: var(--marca-escuro);
+  --color-marca-claro: var(--marca-claro);
   --color-tinta: var(--tinta);
   --color-papel: var(--papel);
   --color-cartao: var(--cartao);
@@ -70,7 +73,7 @@
   --color-conquista: var(--conquista);
   --color-chip: var(--chip);
   --color-borda: var(--borda);
-  --color-azul-texto: var(--azul-texto);
+  --color-marca-texto: var(--marca-texto);
   --color-perigo: var(--perigo);
 
   --color-status-ativo: var(--status-ativo);
@@ -85,7 +88,7 @@
   --radius-cartao-g: 28px;
   --radius-cartao-m: 22px;
 
-  --shadow-destaque: 0 14px 32px -12px rgb(47 107 255 / 0.55);
+  --shadow-destaque: 0 14px 32px -12px rgb(124 77 255 / 0.55);
 
   /* Escala tipográfica do documento */
   --text-tela: 46px;
@@ -102,11 +105,11 @@
 
 html {
   -webkit-tap-highlight-color: transparent;
-  accent-color: var(--azul);
+  accent-color: var(--marca);
 }
 
 :focus-visible {
-  outline: 3px solid var(--azul);
+  outline: 3px solid var(--marca);
   outline-offset: 2px;
 }
 
@@ -145,7 +148,7 @@ dialog.painel[open] {
   outline: none;
 }
 .campo:focus {
-  border-color: var(--azul);
+  border-color: var(--marca);
 }
 .campo::placeholder {
   color: var(--texto-suave);
@@ -168,12 +171,12 @@ dialog.painel[open] {
 .botao:disabled {
   opacity: 0.6;
 }
-.botao-azul {
-  background: var(--azul);
+.botao-marca {
+  background: var(--marca);
   color: #fff;
 }
-.botao-azul:active {
-  background: var(--azul-escuro);
+.botao-marca:active {
+  background: var(--marca-escuro);
 }
 .botao-chip {
   background: var(--chip);
@@ -211,9 +214,15 @@ body {
   letter-spacing: -0.035em;
 }
 
+/* Assinatura da marca: o degradê do contorno do mascote */
+@utility bg-gradiente {
+  background-image: var(--gradiente);
+}
+
 @utility sem-scrollbar {
   scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
   }
 }
+

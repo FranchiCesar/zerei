@@ -65,7 +65,7 @@ export const COR_GRUPO: Record<GrupoStatus, string> = {
   concluido: "bg-status-zerado text-tinta",
   pausado: "bg-status-pausado text-tinta",
   abandonado: "bg-status-abandonado text-white",
-  desejo: "bg-azul-claro text-azul-texto",
+  desejo: "bg-marca-claro text-marca-texto",
 };
 
 export const ROTULO_TIPO: Record<TipoMidia, string> = { jogo: "Jogo", filme: "Filme", serie: "Série" };
@@ -110,7 +110,7 @@ export const ROTULO_STATUS_PECA: Record<StatusPeca, string> = {
 };
 
 export const COR_STATUS_PECA: Record<StatusPeca, string> = {
-  em_uso: "bg-azul text-white",
+  em_uso: "bg-marca text-white",
   guardado: "bg-status-pausado text-tinta",
   vendido: "bg-status-fila text-tinta",
   quebrado: "bg-status-abandonado text-white",

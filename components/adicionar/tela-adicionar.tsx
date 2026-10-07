@@ -103,7 +103,7 @@ export function TelaAdicionar() {
           value={termo}
           onChange={(e) => setTermo(e.target.value)}
           placeholder="Buscar jogo, filme ou série"
-          className="h-14 w-full rounded-full border-2 border-transparent bg-cartao pr-12 pl-13 text-corpo font-medium outline-none focus:border-azul"
+          className="h-14 w-full rounded-full border-2 border-transparent bg-cartao pr-12 pl-13 text-corpo font-medium outline-none focus:border-marca"
         />
         {termo && (
           <button
@@ -150,7 +150,7 @@ export function TelaAdicionar() {
 
       {busca.isFetching && resultados.length === 0 && (
         <div role="status" className="mt-8 flex justify-center">
-          <Loader2 size={28} className="animate-spin text-azul" aria-label="Buscando" />
+          <Loader2 size={28} className="animate-spin text-marca" aria-label="Buscando" />
         </div>
       )}
 
@@ -179,7 +179,7 @@ export function TelaAdicionar() {
           <Mascote expressao="procurando" className="h-28 w-auto" />
           <p className="mt-4 max-w-64 text-corpo font-bold">Esse não encontramos. Quer cadastrar manualmente?</p>
           {!vincularId && (
-            <button type="button" onClick={() => setManualAberto(true)} className="botao botao-azul mt-4">
+            <button type="button" onClick={() => setManualAberto(true)} className="botao botao-marca mt-4">
               Cadastrar manualmente
             </button>
           )}
@@ -216,18 +216,18 @@ export function TelaAdicionar() {
                       </span>
                     </button>
                     {abrindo === chave ? (
-                      <Loader2 size={22} className="mx-3 animate-spin text-azul" aria-label="Abrindo" />
+                      <Loader2 size={22} className="mx-3 animate-spin text-marca" aria-label="Abrindo" />
                     ) : vincularId ? (
                       <Link2 size={22} strokeWidth={2.2} className="mx-3 text-texto-suave" aria-hidden="true" />
                     ) : registro ? (
-                      <Check size={22} strokeWidth={2.4} className="mx-3 text-azul" aria-label="Na biblioteca" />
+                      <Check size={22} strokeWidth={2.4} className="mx-3 text-marca" aria-label="Na biblioteca" />
                     ) : (
                       <button
                         type="button"
                         aria-label={`Adicionar ${r.titulo}`}
                         aria-expanded={escolhendo === chave}
                         onClick={() => setEscolhendo(escolhendo === chave ? null : chave)}
-                        className="flex size-11 shrink-0 items-center justify-center rounded-full bg-azul text-white"
+                        className="flex size-11 shrink-0 items-center justify-center rounded-full bg-marca text-white"
                       >
                         <Plus size={22} strokeWidth={2.4} />
                       </button>

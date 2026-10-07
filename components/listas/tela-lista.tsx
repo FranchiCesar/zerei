@@ -97,7 +97,7 @@ export function TelaLista() {
       {lista.descricao && <p className="mt-3 text-corpo text-texto-suave">{lista.descricao}</p>}
       <p className="mt-2 text-13 font-bold">{plural(lista.itens.length, "item", "itens")}</p>
 
-      <button type="button" onClick={() => setAdicionando(true)} className="botao botao-azul mt-4 w-full">
+      <button type="button" onClick={() => setAdicionando(true)} className="botao botao-marca mt-4 w-full">
         <Plus size={20} strokeWidth={2.4} /> Adicionar da biblioteca
       </button>
 
@@ -210,7 +210,7 @@ function EditarLista({
           <label htmlFor="e-desc" className="rotulo">Descrição</label>
           <textarea id="e-desc" name="descricao" rows={2} className="campo resize-none" defaultValue={lista.descricao ?? ""} maxLength={300} />
         </div>
-        <button type="submit" disabled={editar.isPending} className="botao botao-azul w-full">Salvar</button>
+        <button type="submit" disabled={editar.isPending} className="botao botao-marca w-full">Salvar</button>
         <button type="button" onClick={aoApagar} className="botao botao-perigo w-full">
           <Trash2 size={18} strokeWidth={2.2} /> Apagar lista
         </button>
@@ -255,7 +255,7 @@ function AdicionarItens({ lista, aberto, aoFechar }: { lista: ListaComItens; abe
                 <Capa midia={r.midia} className="h-12 w-9 shrink-0 rounded-[8px]" tamanhoLetra="text-13" />
                 <span className="min-w-0 flex-1 truncate text-corpo font-bold">{r.midia.titulo}</span>
                 <span
-                  className={`flex size-9 shrink-0 items-center justify-center rounded-full ${incluido ? "bg-azul text-white" : "bg-chip"}`}
+                  className={`flex size-9 shrink-0 items-center justify-center rounded-full ${incluido ? "bg-marca text-white" : "bg-chip"}`}
                 >
                   {incluido ? <Check size={18} strokeWidth={2.6} /> : <Plus size={18} strokeWidth={2.4} />}
                 </span>

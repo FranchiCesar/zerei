@@ -143,7 +143,7 @@ function Formulario({ peca }: { peca?: Peca }) {
               onClick={() => entrada.current?.click()}
               className="flex aspect-[4/3] w-full flex-col items-center justify-center gap-2 rounded-[24px] border-2 border-dashed border-borda bg-cartao text-corpo font-bold"
             >
-              <Camera size={32} strokeWidth={2.2} className="text-azul" />
+              <Camera size={32} strokeWidth={2.2} className="text-marca" />
               Tirar ou escolher foto
             </button>
           )}
@@ -226,7 +226,7 @@ function Formulario({ peca }: { peca?: Peca }) {
 
         {erro && <p role="alert" className="text-13 font-bold text-perigo">{erro}</p>}
 
-        <button type="submit" disabled={enviando || salvar.isPending} className="botao botao-azul w-full">
+        <button type="submit" disabled={enviando || salvar.isPending} className="botao botao-marca w-full">
           {enviando ? "Enviando foto..." : salvar.isPending ? "Salvando..." : "Salvar peça"}
         </button>
       </form>

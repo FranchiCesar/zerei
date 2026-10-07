@@ -92,8 +92,8 @@ export function LigarEmLote() {
           <p className="text-13 font-bold">
             Ligando {progresso.feitos} de {progresso.total}... ({ligados} ligados)
           </p>
-          <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-azul-claro">
-            <div className="h-full rounded-full bg-azul transition-all" style={{ width: `${(progresso.feitos / Math.max(1, progresso.total)) * 100}%` }} />
+          <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-marca-claro">
+            <div className="h-full rounded-full bg-marca transition-all" style={{ width: `${(progresso.feitos / Math.max(1, progresso.total)) * 100}%` }} />
           </div>
         </div>
       )}
@@ -124,7 +124,7 @@ export function LigarEmLote() {
       )}
 
       {manuais.length > 0 && !rodando && (
-        <button type="button" onClick={rodar} className="botao botao-azul mt-4 w-full">
+        <button type="button" onClick={rodar} className="botao botao-marca mt-4 w-full">
           <Link2 size={18} strokeWidth={2.2} /> Ligar {manuais.length} títulos agora
         </button>
       )}
