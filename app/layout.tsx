@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, DM_Sans } from "next/font/google";
 import { SerwistProvider } from "@serwist/turbopack/react";
+import { Provedores } from "@/components/provedores";
+import { SCRIPT_TEMA } from "@/lib/tema-script";
 import "./globals.css";
 
 const bricolage = Bricolage_Grotesque({
@@ -44,15 +46,19 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="pt-BR"
+      suppressHydrationWarning
       className={`${bricolage.variable} ${dmSans.variable} h-full antialiased`}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: SCRIPT_TEMA }} />
+      </head>
       <body className="min-h-full">
         {/* Em desenvolvimento o service worker fica desligado para não servir telas velhas */}
         <SerwistProvider
           swUrl="/serwist/sw.js"
           disable={process.env.NODE_ENV === "development"}
         >
-          {children}
+          <Provedores>{children}</Provedores>
         </SerwistProvider>
       </body>
     </html>

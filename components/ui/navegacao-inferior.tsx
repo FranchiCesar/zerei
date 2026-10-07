@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Suspense } from "react";
 import { Columns2, House, List, Plus, User, type LucideIcon } from "lucide-react";
 
 function ItemNav({
@@ -29,8 +30,20 @@ function ItemNav({
   );
 }
 
+// O caminho atual só existe no navegador: enquanto isso, a barra aparece sem item ativo
 export function NavegacaoInferior() {
-  const caminho = usePathname();
+  return (
+    <Suspense fallback={<Barra caminho="" />}>
+      <BarraComCaminho />
+    </Suspense>
+  );
+}
+
+function BarraComCaminho() {
+  return <Barra caminho={usePathname()} />;
+}
+
+function Barra({ caminho }: { caminho: string }) {
   const ativo = (href: string) =>
     caminho === href || caminho.startsWith(`${href}/`);
 

@@ -139,7 +139,7 @@ export function FormularioEntrar() {
           className={`${campo} mt-4 text-center text-22 font-bold tracking-[0.4em]`}
         />
         {erro && (
-          <p role="alert" className="mt-3 text-13 font-bold text-[#C2412D]">
+          <p role="alert" className="mt-3 text-13 font-bold text-perigo">
             {erro}
           </p>
         )}
@@ -199,7 +199,7 @@ export function FormularioEntrar() {
           />
         </div>
         {erro && (
-          <p role="alert" className="mt-3 text-13 font-bold text-[#C2412D]">
+          <p role="alert" className="mt-3 text-13 font-bold text-perigo">
             {erro}
           </p>
         )}

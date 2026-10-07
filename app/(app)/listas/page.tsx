@@ -1,17 +1,13 @@
-import { EstadoVazio } from "@/components/ui/estado-vazio";
-import { TituloTela } from "@/components/ui/titulo-tela";
+import { Suspense } from "react";
+import { TelaListas } from "@/components/listas/tela-listas";
+import { CarregandoTela } from "@/components/ui/esqueleto";
 
 export const metadata = { title: "Listas · Zerei" };
 
 export default function Listas() {
   return (
-    <main>
-      <TituloTela>Listas</TituloTela>
-      <EstadoVazio
-        expressao="dormindo"
-        titulo="Nenhuma lista ainda."
-        texto="Monte listas mistas de jogos, filmes e séries, na ordem que quiser."
-      />
-    </main>
+    <Suspense fallback={<CarregandoTela />}>
+      <TelaListas />
+    </Suspense>
   );
 }

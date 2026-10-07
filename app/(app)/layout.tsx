@@ -1,5 +1,9 @@
+import { Suspense } from "react";
+import { CarregandoTela } from "@/components/ui/esqueleto";
 import { NavegacaoInferior } from "@/components/ui/navegacao-inferior";
 
+// As telas do app dependem do usuário, da data e do endereço: renderizam no acesso,
+// com o esqueleto de carregamento como casca estática.
 export default function AppLayout({
   children,
 }: {
@@ -7,7 +11,7 @@ export default function AppLayout({
 }) {
   return (
     <div className="mx-auto min-h-dvh w-full max-w-md px-4 pt-[max(env(safe-area-inset-top),16px)] pb-[calc(112px+env(safe-area-inset-bottom))]">
-      {children}
+      <Suspense fallback={<CarregandoTela />}>{children}</Suspense>
       <NavegacaoInferior />
     </div>
   );

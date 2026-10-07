@@ -13,6 +13,8 @@
   --conquista: #b6ff3b;
   --chip: #eceae1;
   --borda: #cfcbbd;
+  --azul-texto: #1a47c9;
+  --perigo: #c2412d;
   --linha-relevo: rgb(14 14 14 / 0.05);
 
   --status-ativo: #2f6bff;
@@ -34,6 +36,8 @@
     --texto-suave: #a4a196;
     --chip: #2a2d38;
     --borda: #3a3d48;
+    --azul-texto: #a9c1ff;
+    --perigo: #ff8a75;
     --linha-relevo: rgb(255 255 255 / 0.04);
     color-scheme: dark;
   }
@@ -48,6 +52,8 @@
   --texto-suave: #a4a196;
   --chip: #2a2d38;
   --borda: #3a3d48;
+  --azul-texto: #a9c1ff;
+  --perigo: #ff8a75;
   --linha-relevo: rgb(255 255 255 / 0.04);
   color-scheme: dark;
 }
@@ -64,6 +70,8 @@
   --color-conquista: var(--conquista);
   --color-chip: var(--chip);
   --color-borda: var(--borda);
+  --color-azul-texto: var(--azul-texto);
+  --color-perigo: var(--perigo);
 
   --color-status-ativo: var(--status-ativo);
   --color-status-fila: var(--status-fila);
@@ -94,6 +102,93 @@
 
 html {
   -webkit-tap-highlight-color: transparent;
+  accent-color: var(--azul);
+}
+
+:focus-visible {
+  outline: 3px solid var(--azul);
+  outline-offset: 2px;
+}
+
+/* Painel inferior */
+dialog.painel[open] {
+  animation: painel-subir 0.22s ease-out;
+}
+@keyframes painel-subir {
+  from {
+    transform: translateY(32px);
+    opacity: 0.6;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  dialog.painel[open] {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Campos de formulário */
+.campo {
+  min-height: 48px;
+  width: 100%;
+  border-radius: 16px;
+  border: 2px solid var(--borda);
+  background: var(--cartao);
+  padding: 10px 14px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--texto);
+  outline: none;
+}
+.campo:focus {
+  border-color: var(--azul);
+}
+.campo::placeholder {
+  color: var(--texto-suave);
+}
+.botao {
+  display: flex;
+  min-height: 52px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 999px;
+  padding: 0 20px;
+  font-size: 15px;
+  font-weight: 700;
+  transition: transform 0.1s, background-color 0.15s;
+}
+.botao:active {
+  transform: scale(0.98);
+}
+.botao:disabled {
+  opacity: 0.6;
+}
+.botao-azul {
+  background: var(--azul);
+  color: #fff;
+}
+.botao-azul:active {
+  background: var(--azul-escuro);
+}
+.botao-chip {
+  background: var(--chip);
+  color: var(--texto);
+}
+.botao-perigo {
+  background: transparent;
+  color: var(--perigo);
+  border: 2px solid currentColor;
+}
+.rotulo {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 700;
 }
 
 body {
