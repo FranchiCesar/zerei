@@ -21,17 +21,6 @@ function mensagemDeErro(erro: { message?: string; status?: number; code?: string
   return "Algo deu errado. Tente de novo em instantes.";
 }
 
-function LogoGoogle() {
-  return (
-    <svg viewBox="0 0 48 48" className="size-5" aria-hidden="true">
-      <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z" />
-      <path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z" />
-      <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z" />
-      <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z" />
-    </svg>
-  );
-}
-
 export function FormularioEntrar() {
   const router = useRouter();
   const params = useSearchParams();
@@ -40,31 +29,10 @@ export function FormularioEntrar() {
   const [etapa, setEtapa] = useState<Etapa>("email");
   const [email, setEmail] = useState("");
   const [codigo, setCodigo] = useState("");
-  const [carregando, setCarregando] = useState<"google" | "email" | "codigo" | null>(null);
+  const [carregando, setCarregando] = useState<"email" | "codigo" | null>(null);
   const [erro, setErro] = useState<string | null>(
-    params.get("erro") === "google"
-      ? "Não deu para entrar com o Google. Tente de novo."
-      : params.get("erro") === "acesso"
-        ? "Este e-mail não tem acesso ao Zerei. Peça ao administrador para liberar."
-        : null,
+    params.get("erro") === "acesso" ? "Este e-mail não tem acesso ao Zerei. Peça ao administrador para liberar." : null,
   );
-
-  async function entrarComGoogle() {
-    setErro(null);
-    setCarregando("google");
-    const supabase = criarClienteNavegador();
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback?voltar=${encodeURIComponent(voltar)}`,
-      },
-    });
-    // Em caso de sucesso o navegador já saiu da página
-    if (error) {
-      setErro(mensagemDeErro(error));
-      setCarregando(null);
-    }
-  }
 
   async function enviarCodigo(evento?: React.FormEvent) {
     evento?.preventDefault();
@@ -177,22 +145,6 @@ export function FormularioEntrar() {
 
   return (
     <div className="rounded-[28px] bg-cartao p-5">
-      <button
-        type="button"
-        onClick={entrarComGoogle}
-        disabled={carregando !== null}
-        className="flex h-14 w-full items-center justify-center gap-3 rounded-full border-2 border-borda bg-cartao text-corpo font-bold transition-colors hover:border-texto disabled:opacity-60"
-      >
-        <LogoGoogle />
-        {carregando === "google" ? "Abrindo o Google..." : "Entrar com Google"}
-      </button>
-
-      <div className="my-4 flex items-center gap-3 text-12 font-bold text-texto-suave" aria-hidden="true">
-        <span className="h-0.5 flex-1 rounded-full bg-borda" />
-        ou
-        <span className="h-0.5 flex-1 rounded-full bg-borda" />
-      </div>
-
       <form onSubmit={enviarCodigo}>
         <label htmlFor="email" className="sr-only">
           E-mail

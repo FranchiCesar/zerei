@@ -13,7 +13,7 @@ import { TituloTela } from "@/components/ui/titulo-tela";
 import { useMetas, usePecas, usePerfil, useRegistros, useEpisodiosVistos, useTemporadas } from "@/lib/dados";
 import { concluido, progressoMetas, valorSetup } from "@/lib/estatisticas";
 import { formatarCentavos, formatarData, formatarHoras } from "@/lib/formato";
-import { ROTULO_TIPO_PLURAL } from "@/lib/status";
+import { ROTULO_TIPO_PLURAL, pecaContaNoValor } from "@/lib/status";
 import type { RegistroComMidia } from "@/lib/tipos";
 
 const TEMPOS = [
@@ -49,7 +49,7 @@ export function TelaInicio() {
     .slice(0, 5);
   const metasAno = progressoMetas(registros, metas, ano);
   const metaJogos = metasAno[0];
-  const pecasEmUso = pecas.filter((p) => p.status !== "vendido");
+  const pecasEmUso = pecas.filter((p) => pecaContaNoValor(p.status));
   const primeiroNome = perfil?.nome?.trim().split(/\s+/)[0] || "Você";
 
   return (
@@ -78,7 +78,7 @@ export function TelaInicio() {
 
       {jogando.length === 0 ? (
         <section className="relative mt-5 overflow-hidden rounded-[28px] bg-marca p-5 text-white shadow-destaque">
-          <Mascote expressao="dormindo" className="pointer-events-none absolute right-3 top-5 h-36 w-auto" />
+          <Mascote expressao="dormindo" animacao="flutuar" className="pointer-events-none absolute right-3 top-5 h-36 w-auto" />
           <div className="relative max-w-[62%]">
             <h2 className="titulo text-destaque">Nada rolando.</h2>
             <p className="mt-2 text-13 font-bold">Escolha o próximo da fila e marque como Jogando.</p>
@@ -132,7 +132,11 @@ export function TelaInicio() {
                 ))}
               </div>
             </div>
-            <PontosMeta feitos={metaJogos.feitos} alvo={metaJogos.alvo} />
+            {metaJogos.feitos >= metaJogos.alvo ? (
+              <Mascote expressao="comemorando" animacao="pular" className="h-20 w-auto shrink-0" />
+            ) : (
+              <PontosMeta feitos={metaJogos.feitos} alvo={metaJogos.alvo} />
+            )}
           </div>
         ) : (
           <Link href="/configuracoes#metas" className="flex items-center justify-between gap-3">
@@ -265,7 +269,7 @@ function CartaoJogando({
         sozinho ? "w-full" : "w-[88%]"
       }`}
     >
-      <Mascote className="pointer-events-none absolute right-3 top-8 h-36 w-auto" />
+      <Mascote expressao={pct >= 80 ? "comemorando" : "feliz"} className="pointer-events-none absolute right-3 top-8 h-36 w-auto" />
       <Link href={`/midia/${r.midia_id}`} className="relative block">
         {chip && (
           <span className="inline-block rounded-full bg-cartao px-3 py-1.5 text-12 font-bold text-texto">{chip}</span>

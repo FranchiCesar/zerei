@@ -43,7 +43,7 @@ export function TelaTemporadas() {
     return (
       <main>
         <Topo />
-        <EstadoVazio titulo="Isso não é uma série." texto="Temporadas só existem para séries." />
+        <EstadoVazio expressao="confuso" titulo="Isso não é uma série." texto="Temporadas só existem para séries." />
       </main>
     );
   }

@@ -63,7 +63,7 @@ export function TelaLista() {
     return (
       <main>
         <Topo voltarPara="/listas" />
-        <EstadoVazio titulo="Lista não encontrada." texto="Ela pode ter sido apagada." />
+        <EstadoVazio expressao="confuso" titulo="Lista não encontrada." texto="Ela pode ter sido apagada." />
       </main>
     );
   }

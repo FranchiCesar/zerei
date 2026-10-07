@@ -15,6 +15,7 @@ import {
   TAGS_SUGERIDAS,
   COR_GRUPO,
   GRUPO_DO_STATUS,
+  pecaSaiu,
   rotuloStatus,
 } from "@/lib/status";
 import type { Midia, Registro, StatusRegistro } from "@/lib/tipos";
@@ -106,7 +107,7 @@ function FormularioRegistro({
 
   const tags = useWatch({ control, name: "tags" });
   const maquinas = pecas.filter(
-    (p) => (p.categoria === "console" || p.categoria === "gabinete") && p.status !== "vendido",
+    (p) => (p.categoria === "console" || p.categoria === "gabinete") && !pecaSaiu(p.status),
   );
 
   const enviar = handleSubmit((valores) => {

@@ -17,6 +17,7 @@ import type {
   Registro,
   RegistroComMidia,
   ResultadoBusca,
+  StatusPeca,
   StatusRegistro,
   Temporada,
   TipoMidia,
@@ -523,6 +524,43 @@ export function useSalvarPeca() {
       mostrarAviso("Peça salva.");
     },
     onError: (e) => avisarErro(e, "Não deu para salvar a peça."),
+  });
+}
+
+export type MudancaStatusPeca = Pick<
+  Peca,
+  "status" | "status_desde" | "valor_saida_centavos" | "status_com" | "status_onde" | "status_detalhes"
+>;
+
+const AVISO_STATUS_PECA: Partial<Record<StatusPeca, string>> = {
+  em_uso: "De volta ao setup.",
+  vendido: "Vendida! Saiu do setup e do valor total.",
+  trocado: "Trocada! Saiu do setup e do valor total.",
+  doado: "Doada. Saiu do setup.",
+  descartado: "Descartada. Saiu do setup.",
+  quebrado: "Marcada como quebrada. Ela não conta mais no valor do setup.",
+  em_conserto: "Boa sorte no conserto!",
+  emprestado: "Emprestada. Não esquece de cobrar!",
+};
+
+/** Muda o status da peça com os detalhes (venda, empréstimo, conserto...). */
+export function useMudarStatusPeca() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, ...campos }: MudancaStatusPeca & { id: string }) =>
+      ok<Peca>(await sb().from("pecas").update(campos).eq("id", id).select().single()),
+    onSuccess: (peca) => {
+      qc.setQueryData<Peca[]>(chaves.pecas, (antes) => antes?.map((p) => (p.id === peca.id ? peca : p)));
+      qc.invalidateQueries({ queryKey: chaves.pecas });
+      mostrarAviso(AVISO_STATUS_PECA[peca.status] ?? "Status atualizado.");
+    },
+    onError: (e: { code?: string }) =>
+      avisarErro(
+        e,
+        e.code === "22P02" || e.code === "42703"
+          ? "Falta rodar a migração de status das peças no Supabase."
+          : "Não deu para mudar o status.",
+      ),
   });
 }
 

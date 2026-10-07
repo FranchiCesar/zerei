@@ -10,7 +10,7 @@ import { Topo } from "@/components/ui/topo";
 import { avisarErro } from "@/lib/avisos";
 import { enviarFoto, usePecas, useSalvarPeca } from "@/lib/dados";
 import { centavosParaTexto, reaisParaCentavos } from "@/lib/formato";
-import { GRUPOS_SETUP, ROTULO_CATEGORIA, ROTULO_STATUS_PECA } from "@/lib/status";
+import { GRUPOS_SETUP, ROTULO_CATEGORIA, ROTULO_STATUS_PECA, STATUS_PECA_NO_SETUP } from "@/lib/status";
 import type { CategoriaPeca, Peca, StatusPeca } from "@/lib/tipos";
 
 const esquema = z
@@ -104,7 +104,8 @@ function Formulario({ peca }: { peca?: Peca }) {
         comprado_em: v.data.comprado_em || null,
         loja: v.data.loja || null,
         garantia_ate: v.data.garantia_ate || null,
-        status: v.data.status as StatusPeca,
+        // Na edição o status muda pela ficha (com os detalhes de venda, conserto...)
+        ...(peca ? {} : { status: v.data.status as StatusPeca }),
         observacoes: v.data.observacoes || null,
         foto_url,
       },
@@ -204,20 +205,28 @@ function Formulario({ peca }: { peca?: Peca }) {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className={peca ? "" : "grid grid-cols-2 gap-3"}>
           <div>
             <label htmlFor="loja" className="rotulo">Loja</label>
             <input id="loja" className="campo" placeholder="Kabum" {...register("loja")} />
           </div>
-          <div>
-            <label htmlFor="status" className="rotulo">Status</label>
-            <select id="status" className="campo" {...register("status")}>
-              {(Object.keys(ROTULO_STATUS_PECA) as StatusPeca[]).map((s) => (
-                <option key={s} value={s}>{ROTULO_STATUS_PECA[s]}</option>
-              ))}
-            </select>
-          </div>
+          {!peca && (
+            <div>
+              <label htmlFor="status" className="rotulo">Status</label>
+              <select id="status" className="campo" {...register("status")}>
+                {STATUS_PECA_NO_SETUP.map((s) => (
+                  <option key={s} value={s}>{ROTULO_STATUS_PECA[s]}</option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
+        {peca && (
+          <p className="text-12 text-texto-suave">
+            Status: {ROTULO_STATUS_PECA[peca.status]}. Para vender, marcar como quebrada e outros, use &quot;Mudar status&quot; na
+            ficha da peça.
+          </p>
+        )}
 
         <div>
           <label htmlFor="observacoes" className="rotulo">Observações</label>

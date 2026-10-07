@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { supabaseChavePublica, supabaseUrl } from "./config";
 
 // Rotas abertas sem login
-const ROTAS_PUBLICAS = ["/entrar", "/auth", "/instalar", "/~offline", "/privacidade"];
+const ROTAS_PUBLICAS = ["/entrar", "/instalar", "/~offline", "/privacidade"];
 
 /** Renova a sessão do Supabase e manda quem não entrou para /entrar. */
 export async function atualizarSessao(request: NextRequest) {

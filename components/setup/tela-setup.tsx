@@ -6,33 +6,40 @@ import { ImagePlus, Plus, Trash2 } from "lucide-react";
 import { ImagemPeca } from "@/components/setup/icone-categoria";
 import { CarregandoTela } from "@/components/ui/esqueleto";
 import { EstadoVazio } from "@/components/ui/estado-vazio";
+import { Mascote } from "@/components/ui/mascote";
 import { Painel } from "@/components/ui/painel";
 import { Topo } from "@/components/ui/topo";
 import { useAdicionarFotoSetup, useApagarFotoSetup, useFotosSetup, usePecas } from "@/lib/dados";
 import { valorSetup } from "@/lib/estatisticas";
 import { formatarCentavos, formatarData, plural } from "@/lib/formato";
-import { COR_STATUS_PECA, GRUPOS_SETUP, ROTULO_STATUS_PECA } from "@/lib/status";
-import type { FotoSetup, StatusPeca } from "@/lib/tipos";
+import { COR_STATUS_PECA, GRUPOS_SETUP, ROTULO_STATUS_PECA, STATUS_PECA_NO_SETUP, pecaContaNoValor, pecaSaiu } from "@/lib/status";
+import type { FotoSetup, Peca, StatusPeca } from "@/lib/tipos";
 
-const FILTROS: (StatusPeca | "todos")[] = ["todos", "em_uso", "guardado", "vendido", "quebrado"];
+const FILTROS: (StatusPeca | "todos")[] = ["todos", ...STATUS_PECA_NO_SETUP];
 
 export function TelaSetup() {
   const { data: pecas, isPending } = usePecas();
   const [filtro, setFiltro] = useState<StatusPeca | "todos">("todos");
+  const [aba, setAba] = useState<"atual" | "saidas">("atual");
 
   if (isPending || !pecas) return <CarregandoTela />;
 
-  const naoVendidas = pecas.filter((p) => p.status !== "vendido");
-  const totalAtual = valorSetup(naoVendidas);
+  const noSetup = pecas.filter((p) => !pecaSaiu(p.status));
+  const saidas = pecas
+    .filter((p) => pecaSaiu(p.status))
+    .sort((a, b) => (b.status_desde ?? "").localeCompare(a.status_desde ?? ""));
+  const contam = noSetup.filter((p) => pecaContaNoValor(p.status));
+  const quebradas = noSetup.filter((p) => p.status === "quebrado");
+  const totalAtual = valorSetup(contam);
   const totalGeral = valorSetup(pecas);
-  const visiveis = pecas.filter((p) => filtro === "todos" || p.status === filtro);
+  const visiveis = noSetup.filter((p) => filtro === "todos" || p.status === filtro);
   const grupos = GRUPOS_SETUP.map((g) => {
     const itens = visiveis.filter((p) => g.categorias.includes(p.categoria));
-    return { ...g, itens, total: valorSetup(itens.filter((p) => p.status !== "vendido")) };
+    return { ...g, itens, total: valorSetup(itens.filter((p) => pecaContaNoValor(p.status))) };
   }).filter((g) => g.itens.length > 0);
   const divisao = GRUPOS_SETUP.map((g) => ({
     rotulo: g.rotulo,
-    total: valorSetup(naoVendidas.filter((p) => g.categorias.includes(p.categoria))),
+    total: valorSetup(contam.filter((p) => g.categorias.includes(p.categoria))),
   }))
     .filter((g) => g.total > 0)
     .sort((a, b) => b.total - a.total);
@@ -54,13 +61,20 @@ export function TelaSetup() {
         <EstadoVazio expressao="dormindo" titulo="Seu setup está sem peças." texto="Comece pela principal." />
       ) : (
         <>
-          <section className="mt-5 rounded-[28px] bg-marca p-5 text-white shadow-destaque">
+          <section className="relative mt-5 overflow-hidden rounded-[28px] bg-marca p-5 text-white shadow-destaque">
+            <Mascote expressao="feliz" className="pointer-events-none absolute top-4 right-4 h-20 w-auto" />
             <p className="text-11 font-bold uppercase tracking-[0.14em] text-white/80">Valor do setup</p>
             <p className="titulo mt-1 text-[40px] leading-none">{formatarCentavos(totalAtual, true)}</p>
-            <p className="mt-2 text-13 font-bold">
-              {plural(naoVendidas.length, "peça", "peças")}
+            <p className="mt-2 max-w-[70%] text-13 font-bold">
+              {plural(contam.length, "peça", "peças")}
               {totalGeral !== totalAtual && ` · ${formatarCentavos(totalGeral, true)} já investidos no total`}
             </p>
+            {quebradas.length > 0 && (
+              <p className="mt-1 text-12 font-bold text-white/80">
+                {plural(quebradas.length, "quebrada fora", "quebradas fora")} da conta (
+                {formatarCentavos(valorSetup(quebradas), true)})
+              </p>
+            )}
             <ul className="mt-4 space-y-2" aria-label="Divisão por categoria">
               {divisao.map((d) => (
                 <li key={d.rotulo} className="text-12 font-bold">
@@ -78,56 +92,141 @@ export function TelaSetup() {
 
           <Galeria />
 
-          <div className="sem-scrollbar -mx-4 mt-5 flex gap-2 overflow-x-auto px-4" role="group" aria-label="Filtrar por status">
-            {FILTROS.map((f) => (
+          <div className="mt-6 grid grid-cols-2 gap-1 rounded-full bg-cartao p-1" role="tablist" aria-label="Peças">
+            {(
+              [
+                ["atual", `No setup (${noSetup.length})`],
+                ["saidas", `Vendidos e saídas (${saidas.length})`],
+              ] as const
+            ).map(([valor, rotulo]) => (
               <button
-                key={f}
+                key={valor}
                 type="button"
-                aria-pressed={filtro === f}
-                onClick={() => setFiltro(f)}
-                className={`min-h-10 shrink-0 rounded-full px-4 text-12 font-bold ${filtro === f ? "bg-tinta text-white" : "bg-cartao"}`}
+                role="tab"
+                aria-selected={aba === valor}
+                onClick={() => setAba(valor)}
+                className={`min-h-11 rounded-full px-2 text-12 font-bold ${aba === valor ? "bg-tinta text-white" : ""}`}
               >
-                {f === "todos" ? "Todas" : ROTULO_STATUS_PECA[f]}
+                {rotulo}
               </button>
             ))}
           </div>
 
-          {grupos.length === 0 && <p className="mt-4 text-corpo text-texto-suave">Nenhuma peça com esse status.</p>}
-
-          {grupos.map((g) => (
-            <section key={g.rotulo} className="mt-5">
-              <div className="flex items-baseline justify-between">
-                <h2 className="titulo text-22">{g.rotulo}</h2>
-                <span className="text-13 font-bold text-texto-suave">{formatarCentavos(g.total, true)}</span>
-              </div>
-              <ul className="mt-2 divide-y-2 divide-chip overflow-hidden rounded-[22px] bg-cartao">
-                {g.itens.map((p) => (
-                  <li key={p.id}>
-                    <Link href={`/setup/${p.id}`} className="flex items-center gap-3 p-3">
-                      <ImagemPeca peca={p} className="size-12 shrink-0 rounded-[14px]" />
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-corpo font-bold">{p.modelo}</p>
-                        <p className="truncate text-12 text-texto-suave">
-                          {[p.marca, p.observacoes].filter(Boolean).join(" · ") || "—"}
-                        </p>
-                      </div>
-                      <div className="shrink-0 text-right">
-                        <p className="text-13 font-bold">{formatarCentavos(p.preco_centavos)}</p>
-                        {p.status !== "em_uso" && (
-                          <span className={`mt-0.5 inline-block rounded-full px-2 py-0.5 text-11 font-bold ${COR_STATUS_PECA[p.status]}`}>
-                            {ROTULO_STATUS_PECA[p.status]}
-                          </span>
-                        )}
-                      </div>
-                    </Link>
-                  </li>
+          {aba === "saidas" ? (
+            <Saidas pecas={saidas} />
+          ) : (
+            <>
+              <div className="sem-scrollbar -mx-4 mt-4 flex gap-2 overflow-x-auto px-4" role="group" aria-label="Filtrar por status">
+                {FILTROS.map((f) => (
+                  <button
+                    key={f}
+                    type="button"
+                    aria-pressed={filtro === f}
+                    onClick={() => setFiltro(f)}
+                    className={`min-h-10 shrink-0 rounded-full px-4 text-12 font-bold ${filtro === f ? "bg-tinta text-white" : "bg-cartao"}`}
+                  >
+                    {f === "todos" ? "Todas" : ROTULO_STATUS_PECA[f]}
+                  </button>
                 ))}
-              </ul>
-            </section>
-          ))}
+              </div>
+
+              {grupos.length === 0 && (
+                <EstadoVazio expressao="procurando" titulo="Nenhuma peça com esse status." texto="Escolha outro filtro." />
+              )}
+
+              {grupos.map((g) => (
+                <section key={g.rotulo} className="mt-5">
+                  <div className="flex items-baseline justify-between">
+                    <h2 className="titulo text-22">{g.rotulo}</h2>
+                    <span className="text-13 font-bold text-texto-suave">{formatarCentavos(g.total, true)}</span>
+                  </div>
+                  <ul className="mt-2 divide-y-2 divide-chip overflow-hidden rounded-[22px] bg-cartao">
+                    {g.itens.map((p) => (
+                      <LinhaPeca key={p.id} peca={p} />
+                    ))}
+                  </ul>
+                </section>
+              ))}
+            </>
+          )}
         </>
       )}
     </main>
+  );
+}
+
+function LinhaPeca({ peca: p, valor, detalhe }: { peca: Peca; valor?: string; detalhe?: string }) {
+  return (
+    <li>
+      <Link href={`/setup/${p.id}`} className="flex items-center gap-3 p-3">
+        <ImagemPeca peca={p} className={`size-12 shrink-0 rounded-[14px] ${pecaSaiu(p.status) ? "opacity-70 grayscale" : ""}`} />
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-corpo font-bold">{p.modelo}</p>
+          <p className="truncate text-12 text-texto-suave">
+            {detalhe ?? ([p.marca, p.observacoes].filter(Boolean).join(" · ") || "—")}
+          </p>
+        </div>
+        <div className="shrink-0 text-right">
+          <p className="text-13 font-bold">{valor ?? formatarCentavos(p.preco_centavos)}</p>
+          {p.status !== "em_uso" && (
+            <span className={`mt-0.5 inline-block rounded-full px-2 py-0.5 text-11 font-bold ${COR_STATUS_PECA[p.status]}`}>
+              {ROTULO_STATUS_PECA[p.status]}
+            </span>
+          )}
+        </div>
+      </Link>
+    </li>
+  );
+}
+
+/** Peças que saíram: quanto entrou com vendas e trocas e o resultado contra o que foi pago. */
+function Saidas({ pecas }: { pecas: Peca[] }) {
+  if (pecas.length === 0) {
+    return (
+      <EstadoVazio
+        expressao="dormindo"
+        titulo="Nada vendido ainda."
+        texto="Quando vender, trocar, doar ou descartar uma peça, mude o status na ficha dela e ela aparece aqui."
+      />
+    );
+  }
+
+  const comValor = pecas.filter((p) => p.valor_saida_centavos != null);
+  const recebido = comValor.reduce((s, p) => s + (p.valor_saida_centavos ?? 0), 0);
+  const pagoNelas = comValor.reduce((s, p) => s + (p.preco_centavos ?? 0), 0);
+  const resultado = recebido - pagoNelas;
+
+  return (
+    <>
+      <section className="mt-4 flex items-center gap-4 rounded-[24px] bg-tinta p-5 text-white">
+        <div className="flex-1">
+          <p className="text-11 font-bold uppercase tracking-[0.14em] text-white/70">Recebido em vendas e trocas</p>
+          <p className="titulo mt-1 text-destaque">{comValor.length ? formatarCentavos(recebido, true) : "—"}</p>
+          {comValor.length === 0 ? (
+            <p className="mt-1 text-13 font-bold text-white/80">Anote o valor da venda na ficha da peça para ver lucro ou prejuízo.</p>
+          ) : (
+            <p className={`mt-1 text-13 font-bold ${resultado >= 0 ? "text-conquista" : "text-white/80"}`}>
+              {resultado >= 0 ? "Lucro" : "Prejuízo"} de {formatarCentavos(Math.abs(resultado), true)} sobre{" "}
+              {formatarCentavos(pagoNelas, true)} pagos
+            </p>
+          )}
+        </div>
+        <Mascote expressao={comValor.length === 0 ? "pensando" : resultado >= 0 ? "comemorando" : "piscando"} className="h-20 w-auto shrink-0" />
+      </section>
+
+      <ul className="mt-4 divide-y-2 divide-chip overflow-hidden rounded-[22px] bg-cartao">
+        {pecas.map((p) => (
+          <LinhaPeca
+            key={p.id}
+            peca={p}
+            valor={p.valor_saida_centavos != null ? formatarCentavos(p.valor_saida_centavos) : "—"}
+            detalhe={[p.status_desde ? formatarData(p.status_desde) : null, p.status_onde, `pago ${formatarCentavos(p.preco_centavos)}`]
+              .filter(Boolean)
+              .join(" · ")}
+          />
+        ))}
+      </ul>
+    </>
   );
 }
 

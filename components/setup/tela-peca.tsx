@@ -2,16 +2,19 @@
 
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { CalendarDays, Pencil, ShieldCheck, Store, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { ArrowRightLeft, CalendarDays, Pencil, ShieldCheck, Store, Trash2 } from "lucide-react";
 import { ImagemPeca } from "@/components/setup/icone-categoria";
+import { MudarStatusPeca } from "@/components/setup/mudar-status-peca";
 import { Capa } from "@/components/ui/capa";
 import { ChipStatus } from "@/components/ui/chip-status";
 import { CarregandoTela } from "@/components/ui/esqueleto";
 import { EstadoVazio } from "@/components/ui/estado-vazio";
+import { Mascote } from "@/components/ui/mascote";
 import { Topo } from "@/components/ui/topo";
 import { useApagarPeca, usePecas, useRegistros } from "@/lib/dados";
 import { formatarCentavos, formatarData, hojeISO } from "@/lib/formato";
-import { COR_STATUS_PECA, ROTULO_CATEGORIA, ROTULO_STATUS_PECA } from "@/lib/status";
+import { pecaSaiu, COR_STATUS_PECA, DETALHES_STATUS_PECA, EXPRESSAO_STATUS_PECA, ROTULO_CATEGORIA, ROTULO_STATUS_PECA } from "@/lib/status";
 
 function situacaoGarantia(ate: string | null) {
   if (!ate) return null;
@@ -27,6 +30,7 @@ export function TelaPeca() {
   const { data: pecas, isPending } = usePecas();
   const { data: registros = [] } = useRegistros();
   const apagar = useApagarPeca();
+  const [mudando, setMudando] = useState(false);
 
   if (isPending) return <CarregandoTela />;
   const peca = pecas?.find((p) => p.id === id);
@@ -34,13 +38,21 @@ export function TelaPeca() {
     return (
       <main>
         <Topo voltarPara="/setup" />
-        <EstadoVazio titulo="Peça não encontrada." texto="Ela pode ter sido apagada." />
+        <EstadoVazio expressao="confuso" titulo="Peça não encontrada." texto="Ela pode ter sido apagada." />
       </main>
     );
   }
 
   const jogos = registros.filter((r) => r.peca_id === peca.id);
-  const garantia = situacaoGarantia(peca.garantia_ate);
+  const resumo = [
+    peca.status_desde ? `${DETALHES_STATUS_PECA[peca.status].data ?? "Desde"} ${formatarData(peca.status_desde)}` : null,
+    peca.valor_saida_centavos != null ? formatarCentavos(peca.valor_saida_centavos) : null,
+    peca.status_onde,
+    peca.status_com ? (peca.status === "vendido" ? `comprador: ${peca.status_com}` : peca.status_com) : null,
+  ].filter(Boolean) as string[];
+  const resultado =
+    peca.valor_saida_centavos != null && peca.preco_centavos != null ? peca.valor_saida_centavos - peca.preco_centavos : null;
+  const garantia = pecaSaiu(peca.status) ? null : situacaoGarantia(peca.garantia_ate);
 
   return (
     <main>
@@ -57,9 +69,31 @@ export function TelaPeca() {
         {peca.marca ? ` · ${peca.marca}` : ""}
       </p>
       <h1 className="titulo mt-1 text-destaque [overflow-wrap:anywhere]">{peca.modelo}</h1>
-      <span className={`mt-3 inline-block rounded-full px-3 py-1 text-12 font-bold ${COR_STATUS_PECA[peca.status]}`}>
-        {ROTULO_STATUS_PECA[peca.status]}
-      </span>
+
+      {/* Status atual e detalhes */}
+      <section className="mt-4 rounded-[22px] bg-cartao p-4">
+        <div className="flex items-center gap-3">
+          <Mascote expressao={EXPRESSAO_STATUS_PECA[peca.status]} className="h-14 w-auto shrink-0" />
+          <div className="min-w-0 flex-1">
+            <span className={`inline-block rounded-full px-3 py-1 text-12 font-bold ${COR_STATUS_PECA[peca.status]}`}>
+              {ROTULO_STATUS_PECA[peca.status]}
+            </span>
+            {resumo.length > 0 && <p className="mt-1.5 text-13 font-bold">{resumo.join(" · ")}</p>}
+            {peca.status_detalhes && <p className="mt-1 text-13 text-texto-suave">{peca.status_detalhes}</p>}
+          </div>
+        </div>
+        {resultado != null && (
+          <p className={`mt-3 rounded-[14px] px-3 py-2 text-13 font-bold ${resultado >= 0 ? "bg-conquista text-tinta" : "bg-chip text-perigo"}`}>
+            {resultado === 0
+              ? "Saiu pelo mesmo preço que você pagou."
+              : `${resultado > 0 ? "Lucro" : "Prejuízo"} de ${formatarCentavos(Math.abs(resultado))} em relação ao preço pago.`}
+          </p>
+        )}
+        <button type="button" onClick={() => setMudando(true)} className="botao botao-chip mt-3 w-full">
+          <ArrowRightLeft size={18} strokeWidth={2.2} /> Mudar status
+        </button>
+        <p className="mt-2 text-center text-12 text-texto-suave">Vendeu, quebrou, emprestou, mandou para o conserto...</p>
+      </section>
 
       <dl className="mt-5 grid grid-cols-2 gap-3">
         <div className="col-span-2 rounded-[22px] bg-cartao p-4">
@@ -82,7 +116,10 @@ export function TelaPeca() {
           <dt className="flex items-center gap-1.5 text-11 font-bold uppercase tracking-[0.1em] opacity-80">
             <ShieldCheck size={14} strokeWidth={2.4} /> Garantia
           </dt>
-          <dd className="mt-1 text-corpo font-bold">{garantia?.texto ?? "Não informada"}</dd>
+          <dd className="mt-1 flex items-center justify-between gap-2 text-corpo font-bold">
+            {garantia?.texto ?? (pecaSaiu(peca.status) ? "Não se aplica mais" : "Não informada")}
+            {garantia?.alerta && <Mascote expressao="surpreso" className="h-10 w-auto shrink-0" />}
+          </dd>
         </div>
       </dl>
 
@@ -125,6 +162,11 @@ export function TelaPeca() {
       >
         <Trash2 size={18} strokeWidth={2.2} /> Apagar peça
       </button>
+      <p className="mt-2 text-center text-12 text-texto-suave">
+        Apagar remove de vez. Se você vendeu ou se desfez dela, prefira mudar o status para manter o histórico.
+      </p>
+
+      <MudarStatusPeca peca={peca} aberto={mudando} aoFechar={() => setMudando(false)} />
     </main>
   );
 }

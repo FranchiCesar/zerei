@@ -158,11 +158,13 @@ export function TelaBiblioteca() {
 
       {registros.length === 0 ? (
         <EstadoVazio
+          expressao="dormindo"
           titulo="Sua biblioteca está vazia."
           texto="Toque no + para adicionar o primeiro jogo, filme ou série."
         />
       ) : filtrados.length === 0 ? (
         <EstadoVazio
+          expressao={grupo === "fila" ? "comemorando" : "procurando"}
           titulo={grupo === "fila" ? "Backlog limpo. Que lenda." : "Nada por aqui."}
           texto="Mude o filtro ou a aba para ver outros títulos."
         />

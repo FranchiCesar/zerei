@@ -1,5 +1,5 @@
-import { anoDe } from "./formato";
-import { GRUPO_DO_STATUS } from "./status";
+import { anoDe, formatarCentavos } from "./formato";
+import { GRUPO_DO_STATUS, ROTULO_STATUS_PECA, pecaContaNoValor, pecaSaiu } from "./status";
 import type { Meta, Peca, RegistroComMidia, TipoMidia } from "./tipos";
 
 export const concluido = (r: RegistroComMidia) => GRUPO_DO_STATUS[r.status] === "concluido";
@@ -78,7 +78,19 @@ export function linhaDoTempo(registros: RegistroComMidia[], pecas: Peca[]): Even
       detalhe: "Peça comprada",
       href: `/setup/${p.id}`,
     }));
-  return [...midias, ...compras].sort((a, b) => b.data.localeCompare(a.data));
+  const saidas = pecas
+    .filter((p) => pecaSaiu(p.status) && p.status_desde)
+    .map((p) => ({
+      data: p.status_desde!,
+      tipo: "peca" as const,
+      titulo: [p.marca, p.modelo].filter(Boolean).join(" "),
+      detalhe:
+        p.valor_saida_centavos != null
+          ? `${ROTULO_STATUS_PECA[p.status]} por ${formatarCentavos(p.valor_saida_centavos)}`
+          : ROTULO_STATUS_PECA[p.status],
+      href: `/setup/${p.id}`,
+    }));
+  return [...midias, ...compras, ...saidas].sort((a, b) => b.data.localeCompare(a.data));
 }
 
 export interface Conquista {
@@ -94,7 +106,7 @@ export function conquistas(registros: RegistroComMidia[], pecas: Peca[]): Conqui
   const series = registros.filter((r) => r.status === "concluida").length;
   const platinas = registros.filter((r) => r.tags.includes("platinado")).length;
   const notas10 = registros.filter((r) => r.nota === 10).length;
-  const setup = valorSetup(pecas.filter((p) => p.status !== "vendido"));
+  const setup = valorSetup(pecas.filter((p) => pecaContaNoValor(p.status)));
 
   return [
     { id: "primeiro", titulo: "Primeiro zerado", descricao: "Zerar o primeiro jogo", obtida: zerados >= 1 },

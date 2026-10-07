@@ -20,7 +20,7 @@ import {
   valorSetup,
 } from "@/lib/estatisticas";
 import { formatarCentavos, formatarData } from "@/lib/formato";
-import { ROTULO_TIPO_PLURAL } from "@/lib/status";
+import { ROTULO_TIPO_PLURAL, pecaContaNoValor } from "@/lib/status";
 
 // Recharts só no navegador, e fora do pacote inicial
 const GraficoRanking = dynamic(() => import("./grafico-ranking").then((m) => m.GraficoRanking), {
@@ -43,7 +43,7 @@ export function TelaPerfil() {
   const filmes = registros.filter((r) => r.status === "assistido").length;
   const series = registros.filter((r) => r.status === "concluida").length;
   const horas = Math.round(totalHoras(registros));
-  const setup = valorSetup(pecas.filter((p) => p.status !== "vendido"));
+  const setup = valorSetup(pecas.filter((p) => pecaContaNoValor(p.status)));
   const generos = porGenero(registros);
   const plataformas = porPlataforma(registros);
   const lista = conquistas(registros, pecas);

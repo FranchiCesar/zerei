@@ -1,3 +1,4 @@
+import type { Expressao } from "@/components/ui/mascote";
 import type { CategoriaPeca, StatusPeca, StatusRegistro, TipoMidia } from "./tipos";
 
 export const STATUS_POR_TIPO: Record<TipoMidia, StatusRegistro[]> = {
@@ -105,16 +106,99 @@ export const GRUPOS_SETUP: { rotulo: string; categorias: CategoriaPeca[] }[] = [
 export const ROTULO_STATUS_PECA: Record<StatusPeca, string> = {
   em_uso: "Em uso",
   guardado: "Guardado",
-  vendido: "Vendido",
+  emprestado: "Emprestado",
+  em_conserto: "Em conserto",
   quebrado: "Quebrado",
+  vendido: "Vendido",
+  trocado: "Trocado",
+  doado: "Doado",
+  descartado: "Descartado",
 };
 
 export const COR_STATUS_PECA: Record<StatusPeca, string> = {
   em_uso: "bg-marca text-white",
   guardado: "bg-status-pausado text-tinta",
-  vendido: "bg-status-fila text-tinta",
-  quebrado: "bg-status-abandonado text-white",
+  emprestado: "bg-marca-claro text-marca-texto",
+  em_conserto: "bg-status-fila text-tinta",
+  quebrado: "bg-perigo text-white",
+  vendido: "bg-conquista text-tinta",
+  trocado: "bg-conquista text-tinta",
+  doado: "bg-chip text-texto",
+  descartado: "bg-status-abandonado text-white",
 };
+
+/** Ainda com você (aparecem no setup atual). */
+export const STATUS_PECA_NO_SETUP: StatusPeca[] = ["em_uso", "guardado", "emprestado", "em_conserto", "quebrado"];
+/** Saíram do setup: vão para "Vendidos e saídas" e deixam de contar no valor. */
+export const STATUS_PECA_SAIDA: StatusPeca[] = ["vendido", "trocado", "doado", "descartado"];
+
+export const pecaSaiu = (status: StatusPeca) => STATUS_PECA_SAIDA.includes(status);
+/** Entra no "Valor do setup": está com você e funcionando. */
+export const pecaContaNoValor = (status: StatusPeca) => !pecaSaiu(status) && status !== "quebrado";
+
+/** Campos de detalhe pedidos em cada status (rótulos e exemplos). */
+export const DETALHES_STATUS_PECA: Record<
+  StatusPeca,
+  { data?: string; valor?: string; com?: [string, string]; onde?: [string, string]; detalhes?: [string, string] }
+> = {
+  em_uso: {},
+  guardado: { data: "Guardado desde", detalhes: ["Onde está guardado", "Caixa no armário"] },
+  emprestado: { data: "Emprestado em", com: ["Para quem", "Nome do amigo"], detalhes: ["Combinado", "Devolve em dezembro"] },
+  em_conserto: {
+    data: "Enviado em",
+    onde: ["Assistência", "Assistência técnica ou fabricante"],
+    detalhes: ["Problema", "Não liga, cooler barulhento..."],
+  },
+  quebrado: { data: "Quebrou em", detalhes: ["O que aconteceu", "Tela trincada, não dá vídeo..."] },
+  vendido: {
+    data: "Vendido em",
+    valor: "Valor da venda (R$)",
+    onde: ["Onde vendeu", "OLX, Mercado Livre, amigo..."],
+    com: ["Comprador", "Nome (opcional)"],
+    detalhes: ["Detalhes da venda", "Com caixa, frete por conta do comprador..."],
+  },
+  trocado: {
+    data: "Trocado em",
+    valor: "Valor abatido na troca (R$)",
+    onde: ["Onde trocou", "Loja ou pessoa"],
+    detalhes: ["Trocado por", "RTX 5070 + diferença em dinheiro"],
+  },
+  doado: { data: "Doado em", com: ["Para quem", "Irmão, primo..."], detalhes: ["Observação", ""] },
+  descartado: { data: "Descartado em", onde: ["Onde descartou", "Ponto de coleta de eletrônicos"], detalhes: ["Motivo", ""] },
+};
+
+/** Como o mascote reage a cada status da biblioteca. */
+export function expressaoDoRegistro(status: StatusRegistro, tags: string[] = []): Expressao {
+  if (tags.includes("platinado")) return "deslumbrado";
+  const mapa: Record<StatusRegistro, Expressao> = {
+    jogando: "feliz",
+    assistindo: "feliz",
+    na_fila: "pensando",
+    quero_ver: "pensando",
+    zerado: "comemorando",
+    assistido: "comemorando",
+    concluida: "comemorando",
+    pausado: "dormindo",
+    abandonado: "triste",
+    desejo: "piscando",
+  };
+  return mapa[status] ?? "neutro";
+}
+
+/** Como o mascote reage a cada status de peça. */
+export const EXPRESSAO_STATUS_PECA: Record<StatusPeca, Expressao> = {
+  em_uso: "feliz",
+  guardado: "dormindo",
+  emprestado: "piscando",
+  em_conserto: "pensando",
+  quebrado: "tonto",
+  vendido: "piscando",
+  trocado: "comemorando",
+  doado: "feliz",
+  descartado: "triste",
+};
+
+export const CANAIS_VENDA = ["OLX", "Mercado Livre", "Facebook", "Enjoei", "Amigo", "Loja"];
 
 export const TAGS_SUGERIDAS = ["emocionante", "cansativo", "joga de novo", "obra-prima", "viciante", "decepcionou"];
 

@@ -9,6 +9,7 @@ import { Capa } from "@/components/ui/capa";
 import { ChipStatus } from "@/components/ui/chip-status";
 import { CarregandoTela } from "@/components/ui/esqueleto";
 import { EstadoVazio } from "@/components/ui/estado-vazio";
+import { Mascote } from "@/components/ui/mascote";
 import { BotaoRedondo, Topo } from "@/components/ui/topo";
 import {
   useAlternarItemLista,
@@ -22,7 +23,7 @@ import {
   useTemporadas,
 } from "@/lib/dados";
 import { formatarData, formatarDuracao, formatarHoras, formatarNota } from "@/lib/formato";
-import { COR_GRUPO, CRITERIOS, GRUPO_DO_STATUS, ROTULO_TIPO, STATUS_POR_TIPO, rotuloStatus } from "@/lib/status";
+import { COR_GRUPO, CRITERIOS, GRUPO_DO_STATUS, ROTULO_TIPO, STATUS_POR_TIPO, expressaoDoRegistro, rotuloStatus } from "@/lib/status";
 import type { Midia } from "@/lib/tipos";
 
 export function TelaFicha() {
@@ -41,7 +42,7 @@ export function TelaFicha() {
     return (
       <main>
         <Topo />
-        <EstadoVazio titulo="Não encontramos esse título." texto="Ele pode ter sido apagado ou ligado a outro cadastro." />
+        <EstadoVazio expressao="confuso" titulo="Não encontramos esse título." texto="Ele pode ter sido apagado ou ligado a outro cadastro." />
       </main>
     );
   }
@@ -113,9 +114,12 @@ export function TelaFicha() {
       {registro ? (
         <section className="mt-5 rounded-[28px] bg-cartao p-5">
           <div className="flex items-start justify-between gap-3">
-            <div>
-              <p className="text-11 font-bold uppercase tracking-[0.14em] text-texto-suave">Sua nota</p>
-              <p className="titulo mt-1 text-tela">{formatarNota(registro.nota)}</p>
+            <div className="flex items-center gap-3">
+              <Mascote expressao={expressaoDoRegistro(registro.status, registro.tags)} className="h-16 w-auto shrink-0" />
+              <div>
+                <p className="text-11 font-bold uppercase tracking-[0.14em] text-texto-suave">Sua nota</p>
+                <p className="titulo mt-1 text-tela">{formatarNota(registro.nota)}</p>
+              </div>
             </div>
             <button type="button" onClick={() => setEditando(true)} className="botao botao-marca">
               <Pencil size={18} strokeWidth={2.2} /> Editar

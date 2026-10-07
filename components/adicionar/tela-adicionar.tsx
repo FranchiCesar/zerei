@@ -138,7 +138,7 @@ export function TelaAdicionar() {
       {/* Estados */}
       {termoAtrasado.length < 2 && !vincularId && (
         <div className="mt-8 flex flex-col items-center text-center">
-          <Mascote expressao="procurando" className="h-28 w-auto" />
+          <Mascote expressao="procurando" animacao="flutuar" className="h-28 w-auto" />
           <p className="mt-4 max-w-64 text-corpo text-texto-suave">
             Digite o nome e escolha o status direto no resultado.
           </p>
@@ -156,6 +156,7 @@ export function TelaAdicionar() {
 
       {erroBusca && (
         <div role="alert" className="mt-6 rounded-[22px] bg-cartao p-5">
+          <Mascote expressao="tonto" className="mb-3 h-16 w-auto" />
           <p className="text-corpo font-bold">
             {erroBusca.codigo === "nao_configurado"
               ? "A busca ainda não foi configurada."
@@ -176,7 +177,7 @@ export function TelaAdicionar() {
 
       {semResultado && (
         <div className="mt-8 flex flex-col items-center text-center">
-          <Mascote expressao="procurando" className="h-28 w-auto" />
+          <Mascote expressao="confuso" className="h-28 w-auto" />
           <p className="mt-4 max-w-64 text-corpo font-bold">Esse não encontramos. Quer cadastrar manualmente?</p>
           {!vincularId && (
             <button type="button" onClick={() => setManualAberto(true)} className="botao botao-marca mt-4">

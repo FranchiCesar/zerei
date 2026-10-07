@@ -153,7 +153,7 @@ function montarSlides(
       fundo: "bg-marca text-white",
       conteudo: (
         <>
-          <Mascote expressao="comemorando" className="h-44 w-auto self-start" />
+          <Mascote expressao="deslumbrado" animacao="pular" className="h-44 w-auto self-start" />
           <p className="titulo mt-6 text-tela">Seu {ano} no Zerei</p>
           <p className="mt-3 text-20 font-bold">Bora relembrar o que rolou.</p>
         </>
@@ -273,7 +273,7 @@ function montarSlides(
       fundo: batida ? "bg-conquista text-tinta" : "bg-marca-claro text-tinta",
       conteudo: (
         <>
-          <Mascote expressao={batida ? "comemorando" : "procurando"} className="h-36 w-auto self-start" />
+          <Mascote expressao={batida ? "comemorando" : "pensando"} animacao={batida ? "pular" : undefined} className="h-36 w-auto self-start" />
           <p className="titulo mt-6 text-tela">{batida ? "Meta batida!" : "Quase lá"}</p>
           <p className="mt-3 text-22 font-bold">
             {jogos.length} de {metaJogos.alvo} jogos

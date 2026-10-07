@@ -31,7 +31,16 @@ export type CategoriaPeca =
   | "movel"
   | "acessorio";
 
-export type StatusPeca = "em_uso" | "guardado" | "vendido" | "quebrado";
+export type StatusPeca =
+  | "em_uso"
+  | "guardado"
+  | "emprestado"
+  | "em_conserto"
+  | "quebrado"
+  | "vendido"
+  | "trocado"
+  | "doado"
+  | "descartado";
 
 export interface DadosExtra {
   sinopse?: string;
@@ -145,6 +154,11 @@ export interface Peca {
   loja: string | null;
   garantia_ate: string | null;
   status: StatusPeca;
+  status_desde: string | null;
+  valor_saida_centavos: number | null;
+  status_com: string | null;
+  status_onde: string | null;
+  status_detalhes: string | null;
   observacoes: string | null;
   criado_em: string;
 }

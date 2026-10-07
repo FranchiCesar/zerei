@@ -52,7 +52,10 @@ Público: jogadores de 18 a 40 anos que consomem jogos e streaming, gostam de or
 ### Setup
 - Categorias: PC (processador, placa de vídeo, memória, placa-mãe, armazenamento, fonte, gabinete, refrigeração), console, monitor, periféricos, áudio, móveis, acessórios
 - Ficha da peça: foto, marca, modelo, preço pago, data e loja da compra, garantia
-- Status: Em uso, Guardado, Vendido, Quebrado
+- Status com você: Em uso, Guardado, Emprestado, Em conserto, Quebrado (quebrada fica na lista, mas sai do valor)
+- Status de saída: Vendido, Trocado, Doado, Descartado — saem do setup atual, vão para a aba "Vendidos e saídas" e deixam de contar no valor
+- Cada mudança guarda data (`status_desde`), valor da venda/troca (`valor_saida_centavos`), com quem (`status_com`), onde (`status_onde`) e detalhes (`status_detalhes`); a venda mostra lucro ou prejuízo sobre o preço pago
+- O status muda pelo botão "Mudar status" na ficha da peça (o formulário de edição não mexe no status)
 - Valor total investido, com divisão por categoria, e galeria de fotos do setup
 
 ### Organização e motivação
@@ -67,7 +70,7 @@ Navegação inferior de 5 itens: Início, Biblioteca, Adicionar (botão central)
 
 | # | Tela | O que tem |
 |---|---|---|
-| 1 | Boas-vindas e login | Entrar com Google ou e-mail; dica guiada de instalação do PWA |
+| 1 | Boas-vindas e login | Entrar com e-mail (código de 6 dígitos); dica guiada de instalação do PWA |
 | 2 | Início | Jogando agora e Assistindo agora em destaque, meta anual, próximos da fila, últimos concluídos, atalho do setup |
 | 3 | Adicionar | Busca única com filtro Jogo, Filme, Série; resultados com capa e ano; adicionar rápido com status |
 | 4 | Ficha da mídia | Capa, dados da API, seu status, nota, resumo, datas, listas; blocos extras por tipo |
@@ -127,7 +130,8 @@ Modo escuro: papel → #08181B, cartao → #112529, marca → #8457FF.
 ### Logo, ícone e mascote
 - Marca: "Zerei" em Bricolage Grotesque 800, cor tinta
 - Ícone: o mascote sobre quadrado tinta (#00262B) com cantos arredondados (`npm run icones` gera a partir de `components/ui/mascote.tsx`)
-- Mascote: fantasminha de corpo claro (#F4F4F4), base em zigue-zague, contorno tinta, halo em degradê roxo → verde e olhos em barra. Expressões em `<Mascote expressao>`: neutro, comemorando (olhos ^ ^, boca aberta e brilhos), dormindo (olhos fechados e "z"), procurando (olhar de lado) e triste (sem acesso)
+- Mascote: fantasminha de corpo claro (#F4F4F4), base em zigue-zague, contorno tinta, halo em degradê roxo → verde e olhos em barra. Detalhes que ficam fora do corpo (brilhos, "z", "?", pontinhos) ficam no canto de cima, fora do halo
+- Expressões (`<Mascote expressao animacao>`, animação "flutuar" ou "pular"): neutro; feliz (avisos de sucesso, jogando agora); comemorando (zerou, meta batida, backlog limpo); deslumbrado (platinou, abertura da retrospectiva); piscando (login, venda, emprestado, desejo); dormindo (nada rolando, sem internet, vazio, pausado, guardado); procurando (busca, filtros vazios); confuso (sem resultado, 404, não encontrado); pensando (carregando, na fila, em conserto); surpreso (garantia vencendo); triste (sem acesso, abandonado, descartado); tonto (erros, peça quebrada). Mapas em `lib/status.ts` (`expressaoDoRegistro`, `EXPRESSAO_STATUS_PECA`)
 - Topo da Início: à esquerda, foto e primeiro nome (leva ao Perfil); à direita, a contagem de zerados. Foto e nome se editam tocando na foto do Perfil ou em Configurações → Conta (foto vai para `fotos/{uid}/perfil/`)
 
 ### Tom de voz
@@ -203,7 +207,7 @@ public/icons/
 ## Etapas
 1. **Base do projeto** — Next.js + TS + Tailwind, tokens de cor, fontes, navegação inferior com 5 itens. ✅
 2. **PWA** — Serwist: manifesto "Zerei", ícones, cor de tema tinta, instalação guiada para iPhone. ✅
-3. **Supabase e login** — migrações do modelo de dados com RLS, login com Google e e-mail. ✅ (código pronto; falta aplicar a migração e configurar o Google)
+3. **Supabase e login** — migrações do modelo de dados com RLS, login por e-mail com código. ✅
 4. **Busca e ficha** — rotas de API IGDB/TMDB, tela Adicionar com busca única, Ficha da mídia com cache em `midias`.
 5. **Biblioteca** — filtro de tipo, abas por status, filtros, ordenação, painel de editar registro.
 6. **Séries** — temporadas com marcação de episódios, barra de progresso, próximo episódio.
@@ -218,7 +222,7 @@ public/icons/
 - Ícones gerados por `npm run icones` (`scripts/gerar-icones.mjs`, usa sharp).
 - Detecção de plataforma e prompt de instalação: `lib/instalacao.ts`; guia em `/instalar`.
 - Supabase: clientes em `lib/supabase/` (`client.ts` navegador, `server.ts` servidor, `proxy.ts` renova sessão). `proxy.ts` na raiz manda quem não entrou para `/entrar` (rotas públicas listadas em `lib/supabase/proxy.ts`).
-- Login: Google (OAuth, volta por `/auth/callback`) e e-mail com **código de 6 dígitos** (OTP), não link mágico — link abriria fora do PWA no iPhone. O template de e-mail do Supabase precisa ter `{{ .Token }}`.
+- Login: só e-mail com **código de 6 dígitos** (OTP), não link mágico — link abriria fora do PWA no iPhone. O login com Google foi removido (app de uso pessoal). O template de e-mail do Supabase precisa ter `{{ .Token }}`.
 - **Acesso restrito (uso pessoal, sem fins comerciais):** só e-mails da tabela `emails_permitidos` entram. O primeiro usuário é `admin` e libera/remove e-mails em Configurações. Três travas: checagem `email_tem_acesso` antes de mandar o código; gancho do Auth "Before User Created" (`public.antes_de_criar_usuario`, ativado no painel do Supabase); políticas RLS `restrictive` com `tem_acesso()` em todas as tabelas do usuário. As rotas de API também exigem `tem_acesso`.
 - Migrações em `supabase/migrations/`, aplicadas colando no SQL Editor do Supabase. Status por tipo de mídia validado pelo gatilho `valida_status_registro`.
 - No Windows (PowerShell 5.1), não editar arquivos com `Get-Content`/`Set-Content`: estraga os acentos.

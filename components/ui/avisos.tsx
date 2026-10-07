@@ -1,7 +1,7 @@
 "use client";
 
-import { Check, PartyPopper, TriangleAlert } from "lucide-react";
 import { fecharAviso, useAvisos } from "@/lib/avisos";
+import { Mascote } from "./mascote";
 
 export function Avisos() {
   const avisos = useAvisos();
@@ -23,13 +23,11 @@ export function Avisos() {
                 : "bg-tinta text-white"
           }`}
         >
-          {aviso.tipo === "erro" ? (
-            <TriangleAlert size={18} strokeWidth={2.2} className="shrink-0" />
-          ) : aviso.tipo === "conquista" ? (
-            <PartyPopper size={18} strokeWidth={2.2} className="shrink-0" />
-          ) : (
-            <Check size={18} strokeWidth={2.4} className="shrink-0 text-conquista" />
-          )}
+          <Mascote
+            expressao={aviso.tipo === "erro" ? "tonto" : aviso.tipo === "conquista" ? "comemorando" : "feliz"}
+            animacao={aviso.tipo === "conquista" ? "pular" : undefined}
+            className="h-8 w-auto shrink-0"
+          />
           {aviso.texto}
         </button>
       ))}
