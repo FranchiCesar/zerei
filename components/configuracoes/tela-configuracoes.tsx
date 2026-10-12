@@ -6,6 +6,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { FileDown, LogOut, Monitor, Moon, Sun, UserX } from "lucide-react";
 import { AcessoAdmin } from "@/components/configuracoes/acesso-admin";
+import { BuscarNotas } from "@/components/configuracoes/buscar-notas";
 import { FormularioPerfil } from "@/components/perfil/formulario-perfil";
 import { LigarEmLote } from "@/components/configuracoes/ligar-em-lote";
 import { Painel } from "@/components/ui/painel";
@@ -76,6 +77,8 @@ export function TelaConfiguracoes() {
       <Metas />
 
       <LigarEmLote />
+
+      <BuscarNotas />
 
       <section className="mt-4 rounded-[24px] bg-cartao p-5">
         <h2 className="titulo text-20">Seus dados</h2>

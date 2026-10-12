@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Check, ChevronRight, Clock, Heart, Link2, ListPlus, Pencil, Trash2 } from "lucide-react";
 import { EditarRegistro } from "@/components/midia/editar-registro";
+import { NotasExternas } from "@/components/midia/notas-externas";
 import { Capa } from "@/components/ui/capa";
 import { ChipStatus } from "@/components/ui/chip-status";
 import { CarregandoTela } from "@/components/ui/esqueleto";
@@ -95,6 +96,8 @@ export function TelaFicha() {
           ))}
         </div>
       )}
+
+      <NotasExternas midia={midia} />
 
       {midia.fonte === "manual" && (
         <Link

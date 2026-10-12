@@ -144,3 +144,5 @@ export async function detalharJogo(idExterno: string) {
     },
   };
 }
+
+export { consultar as consultarIGDB };

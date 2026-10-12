@@ -42,11 +42,30 @@ export type StatusPeca =
   | "doado"
   | "descartado";
 
+export type FonteNota = "imdb" | "rotten" | "metacritic" | "tmdb" | "igdb_critica" | "igdb_publico";
+
+/** Nota de um site de avaliação, sempre convertida para 0–100 em `valor`. */
+export interface NotaExterna {
+  fonte: FonteNota;
+  valor: number;
+  texto: string; // como o site mostra: "8,1", "93%", "74"
+  votos: number | null;
+  url: string | null;
+}
+
+export interface NotasExternas {
+  lista: NotaExterna[];
+  atualizado_em: string;
+  /** false quando falta a chave da OMDb (IMDb, Rotten Tomatoes e Metacritic). */
+  omdb: boolean;
+}
+
 export interface DadosExtra {
   sinopse?: string;
   desenvolvedora?: string;
   elenco?: { nome: string; personagem?: string }[];
   numero_temporadas?: number;
+  notas?: NotasExternas;
   [chave: string]: unknown;
 }
 

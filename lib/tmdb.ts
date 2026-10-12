@@ -107,3 +107,5 @@ export async function detalharFilmeOuSerie(idExterno: string) {
       : [],
   };
 }
+
+export { consultar as consultarTMDB };

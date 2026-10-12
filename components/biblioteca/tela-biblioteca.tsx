@@ -13,12 +13,13 @@ import { Painel } from "@/components/ui/painel";
 import { TituloTela } from "@/components/ui/titulo-tela";
 import { useRegistros } from "@/lib/dados";
 import { formatarNota } from "@/lib/formato";
+import { notaReferencia } from "@/lib/notas";
 import { usePreferencia } from "@/lib/preferencia";
 import { GRUPO_DO_STATUS, ROTULO_GRUPO, type GrupoStatus } from "@/lib/status";
 import type { RegistroComMidia, TipoMidia } from "@/lib/tipos";
 
 type FiltroTipo = "tudo" | TipoMidia;
-type Ordem = "recentes" | "titulo" | "nota" | "ano" | "concluidos";
+type Ordem = "recentes" | "titulo" | "nota" | "critica" | "publico" | "ano" | "concluidos";
 
 const TIPOS: { valor: FiltroTipo; rotulo: string }[] = [
   { valor: "tudo", rotulo: "Tudo" },
@@ -33,7 +34,9 @@ const ORDENS: { valor: Ordem; rotulo: string }[] = [
   { valor: "recentes", rotulo: "Mexidos por último" },
   { valor: "concluidos", rotulo: "Concluídos por último" },
   { valor: "titulo", rotulo: "Título (A–Z)" },
-  { valor: "nota", rotulo: "Maior nota" },
+  { valor: "nota", rotulo: "Maior nota (sua)" },
+  { valor: "critica", rotulo: "Mais bem avaliados pela crítica" },
+  { valor: "publico", rotulo: "Mais bem avaliados pelo público" },
   { valor: "ano", rotulo: "Lançamento mais novo" },
 ];
 
@@ -42,6 +45,8 @@ const ordenar: Record<Ordem, (a: RegistroComMidia, b: RegistroComMidia) => numbe
   concluidos: (a, b) => (b.fim ?? "").localeCompare(a.fim ?? ""),
   titulo: (a, b) => a.midia.titulo.localeCompare(b.midia.titulo, "pt-BR"),
   nota: (a, b) => (b.nota ?? -1) - (a.nota ?? -1),
+  critica: (a, b) => (notaReferencia(b.midia, "critica") ?? -1) - (notaReferencia(a.midia, "critica") ?? -1),
+  publico: (a, b) => (notaReferencia(b.midia, "publico") ?? -1) - (notaReferencia(a.midia, "publico") ?? -1),
   ano: (a, b) => (b.midia.ano ?? 0) - (a.midia.ano ?? 0),
 };
 
@@ -74,6 +79,7 @@ export function TelaBiblioteca() {
   if (isPending || !registros) return <CarregandoTela />;
 
   const busca = texto.trim().toLowerCase();
+  const ordemExterna = ordem === "critica" || ordem === "publico" ? ordem : null;
   const filtrados = doTipo
     .filter((r) => grupo === "todos" || GRUPO_DO_STATUS[r.status] === grupo)
     .filter((r) => !busca || r.midia.titulo.toLowerCase().includes(busca))
@@ -175,10 +181,18 @@ export function TelaBiblioteca() {
               <Link href={`/midia/${r.midia_id}`} className="group block">
                 <div className="relative overflow-hidden rounded-[18px]">
                   <Capa midia={r.midia} className="aspect-[3/4] w-full" />
-                  {r.nota != null && (
-                    <span className="absolute top-1.5 right-1.5 rounded-full bg-tinta/85 px-2 py-0.5 text-11 font-bold text-white">
-                      {formatarNota(r.nota)}
-                    </span>
+                  {ordemExterna ? (
+                    notaReferencia(r.midia, ordemExterna) != null && (
+                      <span className="absolute top-1.5 right-1.5 rounded-full bg-marca px-2 py-0.5 text-11 font-bold text-white">
+                        {notaReferencia(r.midia, ordemExterna)}
+                      </span>
+                    )
+                  ) : (
+                    r.nota != null && (
+                      <span className="absolute top-1.5 right-1.5 rounded-full bg-tinta/85 px-2 py-0.5 text-11 font-bold text-white">
+                        {formatarNota(r.nota)}
+                      </span>
+                    )
                   )}
                   {r.favorito && (
                     <Heart size={16} strokeWidth={2.4} className="absolute top-2 left-2 fill-marca text-white" aria-label="Favorito" />
@@ -198,7 +212,14 @@ export function TelaBiblioteca() {
                 <div className="min-w-0">
                   <p className="truncate text-corpo font-bold">{r.midia.titulo}</p>
                   <p className="truncate text-12 text-texto-suave">
-                    {[r.midia.ano, r.plataforma ?? r.servico, r.nota != null ? `nota ${formatarNota(r.nota)}` : null]
+                    {[
+                      r.midia.ano,
+                      r.plataforma ?? r.servico,
+                      r.nota != null ? `nota ${formatarNota(r.nota)}` : null,
+                      ordemExterna && notaReferencia(r.midia, ordemExterna) != null
+                        ? `${ordemExterna === "critica" ? "crítica" : "público"} ${notaReferencia(r.midia, ordemExterna)}/100`
+                        : null,
+                    ]
                       .filter(Boolean)
                       .join(" · ")}
                   </p>

@@ -12,6 +12,7 @@ import type {
   Meta,
   Midia,
   NotaTemporada,
+  NotasExternas,
   Peca,
   Perfil,
   Registro,
@@ -42,6 +43,7 @@ export const chaves = {
   pecas: ["pecas"] as const,
   fotosSetup: ["fotos-setup"] as const,
   metas: ["metas"] as const,
+  notasExternas: (id: string) => ["notas-externas", id] as const,
 };
 
 // ============================================================
@@ -136,6 +138,39 @@ export function useMidia(id: string) {
     initialData: () =>
       qc.getQueryData<RegistroComMidia[]>(chaves.registros)?.find((r) => r.midia_id === id)?.midia,
     initialDataUpdatedAt: () => qc.getQueryState(chaves.registros)?.dataUpdatedAt,
+  });
+}
+
+/** Busca as notas de crítica e público e atualiza a mídia guardada na biblioteca. */
+export async function buscarNotasExternas(
+  qc: ReturnType<typeof useQueryClient>,
+  midiaId: string,
+  atualizar = false,
+): Promise<NotasExternas> {
+  const resposta = await fetch(`/api/midias/${midiaId}/notas${atualizar ? "?atualizar=1" : ""}`);
+  const json = await resposta.json();
+  if (!resposta.ok) throw Object.assign(new Error(json.mensagem ?? "Falha nas notas"), { codigo: json.erro });
+  const notas = json as NotasExternas;
+  const comNotas = (m: Midia): Midia => ({ ...m, dados_extra: { ...m.dados_extra, notas } });
+  qc.setQueryData<RegistroComMidia[]>(chaves.registros, (antes) =>
+    antes?.map((r) => (r.midia_id === midiaId ? { ...r, midia: comNotas(r.midia) } : r)),
+  );
+  qc.setQueryData<Midia>(chaves.midia(midiaId), (antes) => (antes ? comNotas(antes) : antes));
+  return notas;
+}
+
+/** Notas de IMDb, Metacritic, Rotten Tomatoes, TMDB e IGDB (em cache no servidor por uma semana). */
+export function useNotasExternas(midia: Midia | undefined) {
+  const qc = useQueryClient();
+  const id = midia?.id ?? "";
+  return useQuery({
+    queryKey: chaves.notasExternas(id),
+    queryFn: () => buscarNotasExternas(qc, id),
+    enabled: Boolean(midia) && midia?.fonte !== "manual",
+    initialData: midia?.dados_extra?.notas,
+    initialDataUpdatedAt: midia?.dados_extra?.notas ? new Date(midia.dados_extra.notas.atualizado_em).getTime() : undefined,
+    staleTime: 24 * 60 * 60 * 1000,
+    retry: 1,
   });
 }
 

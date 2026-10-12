@@ -162,6 +162,7 @@ Next.js na Vercel com Supabase. As APIs de conteúdo são chamadas **sempre pelo
 |---|---|---|
 | IGDB | Jogos: capas, gêneros, plataformas, tempo para zerar | Conta Twitch (Client ID e Secret); 4 req/s |
 | TMDB | Filmes e séries: capas, elenco, temporadas, episódios | Chave gratuita; exige crédito à TMDB no app |
+| OMDb | Notas do IMDb, Rotten Tomatoes e Metacritic (filmes e séries) | Chave grátis (`OMDB_API_KEY`, 1.000 req/dia); opcional |
 | Setup | Sem API | Cadastro manual, catálogo próprio de marcas e modelos |
 
 **Regra de ouro:** o app salva uma cópia dos dados da mídia no Supabase na primeira vez que ela é adicionada.
@@ -234,3 +235,4 @@ public/icons/
 - Chaves expostas: chamadas apenas no servidor; `.env.local` fora do Git
 - PWA no iPhone: tela guiada de instalação; notificações depois
 - Deploy: Vercel, projeto `zerei`, produção em https://zereiapp.vercel.app. Ligado ao GitHub: cada push na `main` publica sozinho em produção. `.vercelignore` impede o envio de `.env*` e `supabase/seed/`.
+- Notas de crítica e público: `GET /api/midias/[id]/notas` (`lib/notas-externas.ts`) busca IGDB (crítica e público dos jogos), TMDB e, com `OMDB_API_KEY`, IMDb, Rotten Tomatoes e Metacritic. Guarda em `midias.dados_extra.notas` (valor normalizado 0–100) por uma semana. Ficha mostra em "Crítica e público"; a biblioteca ordena por crítica ou público (`lib/notas.ts`); Configurações busca em lote. Metacritic de jogos não tem API gratuita: para jogos vale a média da crítica da IGDB.
