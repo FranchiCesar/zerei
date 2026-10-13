@@ -108,4 +108,4 @@ export async function detalharFilmeOuSerie(idExterno: string) {
   };
 }
 
-export { consultar as consultarTMDB };
+export { consultar as consultarTMDB, poster as posterTMDB, ano as anoTMDB };

@@ -215,3 +215,16 @@ export interface ResultadoBusca {
   capa_url: string | null;
   detalhe: string | null; // plataformas ou "Filme"/"Série"
 }
+
+export type CriterioRanking = "critica" | "publico" | "em_alta";
+export type PeriodoRanking = "todos" | "ano" | "ano_passado" | "2020" | "2010" | "2000" | "1990" | "1980";
+export type PlataformaRanking = "todas" | "ps5" | "ps4" | "pc" | "switch" | "switch2" | "xbox";
+
+/** Título de um ranking geral, com a nota do site (0–100 em `nota`). */
+export interface ItemRanking extends ResultadoBusca {
+  nota: number;
+  texto: string;
+  escala: string;
+  votos: number | null;
+  tipo_votos: "votos" | "análises";
+}

@@ -31,9 +31,9 @@ export function Provedores({ children }: { children: React.ReactNode }) {
         persister: persistidorDexie,
         maxAge: 1000 * 60 * 60 * 24 * 7,
         buster: "v1",
-        // Resultados de busca não precisam ficar no aparelho
+        // Resultados de busca e rankings não precisam ficar no aparelho
         dehydrateOptions: {
-          shouldDehydrateQuery: (q) => q.queryKey[0] !== "busca" && q.state.status === "success",
+          shouldDehydrateQuery: (q) => q.queryKey[0] !== "busca" && q.queryKey[0] !== "ranking" && q.state.status === "success",
         },
       }}
     >

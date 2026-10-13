@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { ArrowRight, ChevronRight, LayoutGrid, Star } from "lucide-react";
+import { ArrowRight, ChevronRight, LayoutGrid, Star, Trophy } from "lucide-react";
 import { EditarRegistro } from "@/components/midia/editar-registro";
 import { AvisoInstalar } from "@/components/pwa/aviso-instalar";
 import { Avatar } from "@/components/ui/avatar";
@@ -222,6 +222,18 @@ export function TelaInicio() {
           </ul>
         </section>
       )}
+
+      {/* Rankings gerais */}
+      <Link href="/rankings" className="mt-6 flex items-center gap-4 rounded-[24px] bg-cartao p-5">
+        <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-marca text-white">
+          <Trophy size={24} strokeWidth={2.2} />
+        </span>
+        <div className="flex-1">
+          <p className="text-20 font-bold">Rankings</p>
+          <p className="text-13 text-texto-suave">Os mais bem avaliados do mundo em jogos, filmes e séries</p>
+        </div>
+        <ChevronRight size={22} strokeWidth={2.2} />
+      </Link>
 
       {/* Atalho do setup */}
       <Link href="/setup" className="mt-6 flex items-center gap-4 rounded-[24px] bg-tinta p-5 text-white">

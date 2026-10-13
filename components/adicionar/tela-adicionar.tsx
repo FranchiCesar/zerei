@@ -1,8 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { Check, Link2, Loader2, Plus, Search, X } from "lucide-react";
+import { Check, Link2, Loader2, Plus, Search, Trophy, X } from "lucide-react";
 import { CadastroManual } from "@/components/midia/cadastro-manual";
 import { Capa } from "@/components/ui/capa";
 import { Mascote } from "@/components/ui/mascote";
@@ -145,6 +146,9 @@ export function TelaAdicionar() {
           <button type="button" onClick={() => setManualAberto(true)} className="mt-3 text-13 font-bold underline underline-offset-4">
             Ou cadastre manualmente
           </button>
+          <Link href="/rankings" className="botao botao-chip mt-6">
+            <Trophy size={18} strokeWidth={2.2} /> Sem ideia? Veja os rankings
+          </Link>
         </div>
       )}
 
